@@ -6,6 +6,7 @@ import {
 import { UnlockWallet } from "./components/UnlockWallet";
 import { AddWallet } from "./components/AddWallet";
 import { CreateWallet } from "./components/CreateWallet";
+import { TokenList } from "./components/TokenList";
 
 export const App = () => (
   <ChakraProvider theme={theme}>
@@ -13,7 +14,7 @@ export const App = () => (
       <Grid minH="100vh" p={3}>
         {/* <UnlockWallet/> */}
         {/* <AddWallet/> */}
-        <CreateWallet/>
+        {<TokenList/>}
       </Grid>
     </Box>
   </ChakraProvider>
