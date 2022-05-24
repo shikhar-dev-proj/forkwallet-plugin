@@ -1,21 +1,48 @@
-import * as React from "react";
 import {
-  Box, ChakraProvider, Grid,
-  theme
+  Box, Grid
 } from "@chakra-ui/react";
-import { UnlockWallet } from "./components/UnlockWallet";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { AddWallet } from "./components/AddWallet";
-import { CreateWallet } from "./components/CreateWallet";
 import { TokenList } from "./components/TokenList";
+import { AppState, useAppDispatch } from "./store";
+import { LoadWeb3 } from "./store/web3/action-creator";
+import * as bip39 from 'bip39';
+import { HashRouter, Route } from 'react-router-dom';
 
-export const App = () => (
-  <ChakraProvider theme={theme}>
+export const RenderPageBasedOnState = () => {
+  const walletState = useSelector((state: AppState) => state.wallet);
+  // if (wallet.)
+}
+
+export const App = () => {
+
+  // const dispatch = useDispatch();
+  // const web3Data = useSelector((state: AppState) => state.web3);
+  // window.web3 = web3Data;
+  // console.log(web3Data);
+  
+  // useEffect(() => {
+  //   dispatch(LoadWeb3());
+  // }, [dispatch]);
+  const [walletAvailable, setWalletAvailable] = useState(false);
+  const backToMain = () => setWalletAvailable(true);
+
+  return (
     <Box textAlign="center" fontSize="xl" width={320} height={600}>
-      <Grid minH="100vh" p={3}>
+      <Grid height='100%' p={3}>
+        {/* <HashRouter> */}
+          {/* <Route 
+            path="/"
+            component={RenderPageBasedOnState}>
+          </Route> */}
+        {/* </HashRouter> */}
         {/* <UnlockWallet/> */}
-        {/* <AddWallet/> */}
-        {<TokenList/>}
+        { !walletAvailable ? 
+          <AddWallet back={backToMain}/>
+          : <TokenList />
+        }
       </Grid>
     </Box>
-  </ChakraProvider>
-)
+  );
+}
