@@ -26,6 +26,10 @@ const ActionBar = ({ importWalletScreen, setImportWalletScreen, setAddWalletOpti
 export const ImportWallet = ({ setAddWalletOption }) => {
 
     const [importWalletScreen, setImportWalletScreen] = useState(0);
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
+    const [repeatPassword, setRepeatPassword] = useState('');
+    const [areCredentialsValid, setAreCredentialsValid] = useState(false);
   
     return (
       <Grid p={3} templateRows='4rem 1fr 3rem'>
@@ -34,10 +38,10 @@ export const ImportWallet = ({ setAddWalletOption }) => {
           <Divider />
         </VStack>
         {importWalletScreen === 0 ? 
-          <WalletCredentials/> 
+          <WalletCredentials setName={setName} setPassword={setPassword} setRepeatPassword={setRepeatPassword}/> 
           : importWalletScreen === 1 ?
             <ImportWalletSeedPhrase/>
-            : <CreateWalletSuccess/>
+            : null
         }
         {importWalletScreen !== 2 ?
           <ActionBar 
