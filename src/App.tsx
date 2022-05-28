@@ -5,15 +5,16 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddWallet } from "./components/AddWallet";
 import { TokenList } from "./components/TokenList";
-import { AppState, useAppDispatch } from "./store";
 import { LoadWeb3 } from "./store/web3/action-creator";
 import * as bip39 from 'bip39';
 import { HashRouter, Route } from 'react-router-dom';
+import { useInitPasswordState } from "hooks/usePassword";
+import { useWallet } from "hooks/useWallet";
 
-export const RenderPageBasedOnState = () => {
-  const walletState = useSelector((state: AppState) => state.wallet);
-  // if (wallet.)
-}
+// export const RenderPageBasedOnState = () => {
+//   const walletState = useSelector((state: AppState) => state.wallet);
+//   // if (wallet.)
+// }
 
 export const App = () => {
 
@@ -25,6 +26,9 @@ export const App = () => {
   // useEffect(() => {
   //   dispatch(LoadWeb3());
   // }, [dispatch]);
+  useInitPasswordState();
+  const wallet = useWallet();
+
   const [walletAvailable, setWalletAvailable] = useState(false);
   const backToMain = () => setWalletAvailable(true);
 
@@ -38,7 +42,7 @@ export const App = () => {
           </Route> */}
         {/* </HashRouter> */}
         {/* <UnlockWallet/> */}
-        { !walletAvailable ? 
+        { !wallet ? 
           <AddWallet back={backToMain}/>
           : <TokenList />
         }

@@ -1,12 +1,13 @@
 import { Badge, Box, Button, Checkbox, Container, Divider, Grid, HStack, Input, List, ListIcon, ListItem, Spacer, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { MdContentCopy, MdSettings } from "react-icons/md";
-import { mnemonic } from "../mnemonic";
+import { generateMnemonic } from "../hooks/useWallet";
 import { CreateWalletSuccess } from "./CreateWalletSuccess";
 import { WalletCredentials } from "./WalletCredentials";
 
 
-const CreateWalletSeedPhrase = ({ setSeedPhraseCopied }) => {
+const CreateWalletSeedPhrase = ({ mnemonic, setSeedPhraseCopied }) => {
+
   return (
     <VStack justifyContent='space-evenly'>
       <List spacing={3} textAlign='left' fontSize='0.8rem'>
@@ -35,7 +36,7 @@ const CreateWalletSeedPhrase = ({ setSeedPhraseCopied }) => {
   )
 }
 
-const CreateWalletSeedPhraseConfirm = ({setSeedWordsEnteredCorrectly}) => {
+const CreateWalletSeedPhraseConfirm = ({mnemonic, setSeedWordsEnteredCorrectly}) => {
 
   const [inputOne, setInputOne] = useState('');
   const [inputTwo, setInputTwo] = useState('');
@@ -114,11 +115,21 @@ export const CreateWallet = ({ setAddWalletOption, createWallet }) => {
   const [areCredentialsValid, setAreCredentialsValid] = useState(false);
   const [seedPhraseCopied, setSeedPhraseCopied] = useState(false);
   const [seedWordsEnteredCorrectly, setSeedWordsEnteredCorrectly] = useState(false);
+  const [mnemonic, setMnemonic] = useState('');
   // const areCredentialsValid = !!name && password.length >= 8 && password === repeatPassword;
+  
+  
+  useEffect(() => {
+    console.log('setting mnemonic');
+    setMnemonic(generateMnemonic());
+    console.log('mneomnic : ', mnemonic);
+  }, []);
 
   const onSubmit = () => {
+    console.log('submitting create wallet form');
     createWallet(name, password, mnemonic)
   }
+
 
   useEffect(() => {
     setAreCredentialsValid(!!name && password.length >= 8 && password === repeatPassword);
@@ -133,9 +144,9 @@ export const CreateWallet = ({ setAddWalletOption, createWallet }) => {
       {createWalletScreen === 0 ? 
         <WalletCredentials setName={setName} setPassword={setPassword} setRepeatPassword={setRepeatPassword}/> 
         : createWalletScreen === 1 ?
-          <CreateWalletSeedPhrase setSeedPhraseCopied={setSeedPhraseCopied}/>
+          <CreateWalletSeedPhrase mnemonic={mnemonic} setSeedPhraseCopied={setSeedPhraseCopied}/>
           : createWalletScreen === 2 ?
-            <CreateWalletSeedPhraseConfirm setSeedWordsEnteredCorrectly={setSeedWordsEnteredCorrectly}/>
+            <CreateWalletSeedPhraseConfirm mnemonic={mnemonic} setSeedWordsEnteredCorrectly={setSeedWordsEnteredCorrectly}/>
             : null
       }
       {createWalletScreen !== 3 ?

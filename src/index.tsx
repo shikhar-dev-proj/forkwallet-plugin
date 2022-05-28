@@ -6,7 +6,8 @@ import reportWebVitals from "./reportWebVitals"
 import * as serviceWorker from "./serviceWorker"
 import './polyfill'
 import { Provider } from "react-redux"
-import {store} from "./store"
+// import {store} from "./store"
+import { RecoilRoot } from "recoil"
 
 const root = createRoot(document.getElementById("root"));
 
@@ -14,9 +15,11 @@ root.render(
   <StrictMode>
     <ColorModeScript initialColorMode="dark" />
       <ChakraProvider theme={theme}>
-        <Provider store={store}>
-          <App />
-        </Provider>
+        {/* <Provider store={store}> */}
+          <RecoilRoot>
+            <App />
+          </RecoilRoot>
+        {/* </Provider> */}
       </ChakraProvider>
   </StrictMode>
 )

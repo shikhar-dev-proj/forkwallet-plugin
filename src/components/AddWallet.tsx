@@ -1,9 +1,9 @@
 import { Button, Grid, Spacer, Text, VStack } from "@chakra-ui/react"
 import { useState } from "react"
 import { FaGalacticSenate } from "react-icons/fa"
-import { useDispatch, useSelector } from "react-redux"
-import { AppState } from "../store"
-import { CreateWalletFromMnemonic } from "../store/wallet/action-creator"
+import { useDispatch } from "react-redux"
+import { useSetPassword } from "../hooks/usePassword"
+import { initWallet, useWallet } from "../hooks/useWallet"
 import { CreateWallet } from "./CreateWallet"
 import { CreateWalletSuccess } from "./CreateWalletSuccess"
 import { ImportWallet } from "./ImportWallet"
@@ -28,19 +28,21 @@ const AddWalletOptions = ({ setAddWalletOption }) => {
 export const AddWallet = ({back}) => {
 
   const [addWalletOption, setAddWalletOption] = useState('')
-  const dispatch = useDispatch()
-  // const web3Provider = useSelector((state: AppState) => state.web3?.web3);
-  const createdWallet = useSelector((state: AppState) => state.wallet)
+  // const dispatch = useDispatch()
+  const createdWallet = useWallet();
+  const setPassword = useSetPassword();
 
   console.log('Wallet Created State === > ', createdWallet);
 
   const createWallet = (name: string, password: string, mnemonic: string) => {
-    dispatch(CreateWalletFromMnemonic(name, password, mnemonic))
+    console.log('create wallet initiated with ... : ', name, password, mnemonic);
+    initWallet({mnemonic, name, password});
+    setPassword(password);
   }
 
   return (
     <>
-      { createdWallet.loading ?
+      { !createdWallet ?
         !addWalletOption ? 
           <AddWalletOptions setAddWalletOption={setAddWalletOption}/>
           : addWalletOption === 'create' ?

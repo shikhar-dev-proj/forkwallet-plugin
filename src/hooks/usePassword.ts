@@ -1,5 +1,5 @@
 import { addMinutes, isBefore } from 'date-fns';
-import extension from 'webextension-polyfill';
+import extension from 'extensionizer';
 import { useEffect } from 'react';
 import { atom, useRecoilValue, useSetRecoilState } from 'recoil';
 
@@ -33,6 +33,7 @@ export function storePassword(password?: string): void {
     timestamp: password ? timestamp : null,
     encrypted: password ? encrypt(password, String(timestamp)) : null,
   };
+  console.log('setting password ... : ', password, store);
   extension.storage.local.set(store);
 }
 
@@ -46,10 +47,12 @@ export function useInitPasswordState(): void {
 
       const shouldAutoLock = !isBefore(new Date(), addMinutes(new Date(lastActiveTime ?? timestamp), autoLockTime));
       if (shouldAutoLock) {
+        console.log('should lock, clearing set password');
         setPassword(undefined);
         storePassword(undefined);
       } else {
         if (encrypted && timestamp) {
+          console.log('should not lock, decrypting password');
           const decrypted = decrypt(encrypted, String(timestamp));
           setPassword(decrypted);
         }
