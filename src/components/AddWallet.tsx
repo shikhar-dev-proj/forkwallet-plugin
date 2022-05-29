@@ -29,10 +29,10 @@ export const AddWallet = ({back}) => {
 
   const [addWalletOption, setAddWalletOption] = useState('')
   // const dispatch = useDispatch()
-  const createdWallet = useWallet();
+  const { wallet } = useWallet();
   const setPassword = useSetPassword();
 
-  console.log('Wallet Created State === > ', createdWallet);
+  console.log('Wallet Created State === > ', wallet);
 
   const createWallet = (name: string, password: string, mnemonic: string) => {
     console.log('create wallet initiated with ... : ', name, password, mnemonic);
@@ -42,7 +42,7 @@ export const AddWallet = ({back}) => {
 
   return (
     <>
-      { !createdWallet ?
+      { !wallet ?
         !addWalletOption ? 
           <AddWalletOptions setAddWalletOption={setAddWalletOption}/>
           : addWalletOption === 'create' ?

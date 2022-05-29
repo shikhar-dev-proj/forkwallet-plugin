@@ -1,16 +1,18 @@
 import { Button, Input, InputGroup, InputRightElement } from "@chakra-ui/react"
-import * as React from "react"
+import { useState } from "react"
 
-export const PasswordInput = () => {
-  const [show, setShow] = React.useState(false)
+export const PasswordInput = ({ value, setValue }) => {
+  const [show, setShow] = useState(false)
   const handleClick = () => setShow(!show)
 
   return (
     <InputGroup size='md'>
       <Input
+        value={value}
         pr='4.5rem'
         type={show ? 'text' : 'password'}
         placeholder='Enter password'
+        onChange={(e) => setValue(e.target.value)}
       />
       <InputRightElement width='4.5rem'>
         <Button h='1.75rem' size='sm' onClick={handleClick}>

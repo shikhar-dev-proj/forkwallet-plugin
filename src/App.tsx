@@ -5,10 +5,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddWallet } from "./components/AddWallet";
 import { TokenList } from "./components/TokenList";
+import { UnlockWallet } from './components/UnlockWallet';
 import { LoadWeb3 } from "./store/web3/action-creator";
 import * as bip39 from 'bip39';
 import { HashRouter, Route } from 'react-router-dom';
-import { useInitPasswordState } from "hooks/usePassword";
+import { useInitPasswordState, usePassword } from "hooks/usePassword";
 import { useWallet } from "hooks/useWallet";
 
 // export const RenderPageBasedOnState = () => {
@@ -27,10 +28,16 @@ export const App = () => {
   //   dispatch(LoadWeb3());
   // }, [dispatch]);
   useInitPasswordState();
-  const wallet = useWallet();
+
+  const password = usePassword();
+  const { wallet, hasWallet } = useWallet();
 
   const [walletAvailable, setWalletAvailable] = useState(false);
   const backToMain = () => setWalletAvailable(true);
+
+  console.log('wallet ... : ', wallet);
+  console.log('hasWallet .... : ', hasWallet);
+  console.log('password ... : ', password);
 
   return (
     <Box textAlign="center" fontSize="xl" width={320} height={600}>
@@ -42,9 +49,13 @@ export const App = () => {
           </Route> */}
         {/* </HashRouter> */}
         {/* <UnlockWallet/> */}
-        { !wallet ? 
-          <AddWallet back={backToMain}/>
-          : <TokenList />
+        { !hasWallet ? 
+            <AddWallet back={backToMain}/>
+            : hasWallet && !password ?
+              <UnlockWallet></UnlockWallet> 
+              : hasWallet && !!wallet && !!password ?
+                <TokenList/>
+                : null
         }
       </Grid>
     </Box>

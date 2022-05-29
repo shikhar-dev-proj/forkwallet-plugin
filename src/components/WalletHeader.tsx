@@ -1,8 +1,9 @@
-import { Divider, Flex, Grid, HStack, IconButton, Text, VStack } from "@chakra-ui/react";
+import { Divider, Flex, Grid, IconButton, Text } from "@chakra-ui/react";
+import { BsFillShieldLockFill } from "react-icons/bs";
 import { FaGalacticSenate, FaRegCopy } from "react-icons/fa";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { GiPadlock } from "react-icons/gi";
 
-export const WalletHeader = ({ walletName, walletAddress }) => {
+export const WalletHeader = ({ walletName, walletAddress, lockWallet }) => {
   return (
     <Grid templateRows='4rem 1rem'>
       <Flex justifyContent='space-evenly' alignItems='center'>
@@ -11,12 +12,12 @@ export const WalletHeader = ({ walletName, walletAddress }) => {
           <Text fontSize='0.75rem' fontWeight={900}>{walletName}</Text>
           <Flex>
             <Text fontSize='0.75rem' mr='0.5rem'>{walletAddress}</Text>
-            <FaRegCopy/>
+            <FaRegCopy />
           </Flex>
         </Grid>
-        <IconButton aria-label='Menu' icon={<GiHamburgerMenu />} />
+        <IconButton aria-label='Lock' icon={<BsFillShieldLockFill />} onClick={lockWallet} />
       </Flex>
-      <Divider/>
+      <Divider />
     </Grid>
   )
 }

@@ -10,20 +10,24 @@ import { CreateWalletFromMnemonic } from "../store/wallet/action-creator";
 import { useEffect, useState } from "react";
 import BEEFY_ROUTER_ABI from '../abis/BeefyRouter.json';
 import { useWallet } from "hooks/useWallet";
+import { useSetPassword } from "hooks/usePassword";
 
 export const TokenList = () => {
 
   const walletState = useWallet();
-  const wallet = walletState?.wallet;
+  const setPassword = useSetPassword()
+  const wallet = walletState?.wallet?.wallet;
 
-  const walletName = walletState?.name;
-  const walletAddress = walletState?.wallet.address;
+  const walletName = walletState?.wallet?.name;
+  const walletAddress = wallet?.address;
   const trimmedAddress = walletAddress?.slice(0,4) + '....' + walletAddress?.slice(walletAddress.length-4, walletAddress.length);
 
   const [balance, setBalance] = useState('');
   const [coinSymbol, setCoinSymbol] = useState('');
   const [coinName, setCoinName] = useState('');
   const [balanceLoading, setBalanceLoading] = useState(true);
+
+  const lockWallet = () => setPassword(undefined);
 
   // useEffect(() => {
   //   const loadTokenBalance = async () => {
@@ -41,7 +45,7 @@ export const TokenList = () => {
 
   return (
     <Grid templateRows='5rem 1fr 4rem'>
-      <WalletHeader walletAddress={trimmedAddress} walletName={walletName} />
+      <WalletHeader walletAddress={trimmedAddress} walletName={walletName} lockWallet={lockWallet} />
       <VStack>
         {/* {balanceLoading ?
           <Spinner size='xl' />

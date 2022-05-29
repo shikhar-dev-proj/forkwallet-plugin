@@ -30,20 +30,29 @@ const walletState = atom<ForkWallet | undefined>({
   default: undefined,
 });
 
-export function useWallet(): ForkWallet | undefined {
+export type UseWalletReturnType = {
+  wallet: ForkWallet | undefined;
+  hasWallet: boolean;
+}
+
+export function useWallet(): UseWalletReturnType {
   const password = usePassword()
   const [wallet, setWallet] = useRecoilState(walletState)
+  const [hasWallet, setHasWallet] = useState(false);
 
   useEffect(() => {
     extension.storage.local.get([WALLET_KEY], (data) => {
       const encryptedWallet = data[WALLET_KEY]
       console.log('encrypted wallet ... : ', encryptedWallet);
+      if (!!encryptedWallet) {
+        setHasWallet(true);
+      } else {
+        setHasWallet(false);
+      }
       if (!!encryptedWallet && !!password) {
         console.log('encrypted wallet and password present ... :', encryptedWallet, password);
         try {
-
           const walletStr = decrypt(encryptedWallet, password)
-  
           console.log('decrypted wallet str ... : ', walletStr);
           const decryptedWallet = JSON.parse(walletStr);
           console.log('decrypted wallet ... : ', decryptedWallet);
@@ -54,7 +63,7 @@ export function useWallet(): ForkWallet | undefined {
       }
     })
   }, [password]);
-  return wallet;
+  return {wallet, hasWallet};
 }
 
 export function initWallet({ mnemonic, name, password }: InitWalletParams): void {
