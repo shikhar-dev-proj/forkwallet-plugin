@@ -1,4 +1,4 @@
-import { Button, extendTheme, Grid, Spacer, Spinner, Stat, StatHelpText, StatLabel, StatNumber, VStack } from "@chakra-ui/react"
+import { Button, extendTheme, Grid, Spacer, Spinner, Stat, StatHelpText, StatLabel, StatNumber, useClipboard, VStack } from "@chakra-ui/react"
 import { FooterNav } from "./FooterNav"
 import { WalletHeader } from "./WalletHeader"
 import CronosMock from '../abis/CronosMock.json';
@@ -19,32 +19,32 @@ export const TokenList = () => {
   const setPassword = useSetPassword()
   const { balance, balanceLoading } = useBalance();
   const wallet = walletState?.wallet?.wallet;
-
   const walletName = walletState?.wallet?.name;
   const walletAddress = wallet?.address;
+  const { hasCopied, onCopy } = useClipboard(walletAddress!);
   const trimmedAddress = walletAddress?.slice(0,4) + '....' + walletAddress?.slice(walletAddress.length-4, walletAddress.length);
 
   const lockWallet = () => setPassword(undefined);
 
   // useEffect(() => {
-  //   const loadTokenBalance = async () => {
-  //     if (!!wallet?.provider) {
-  //       const provider = wallet.provider;
-  //       console.log(provider);
-  //       debugger
-  //       const balance: BigNumber = await provider.getBalance(wallet.address);
-  //       const tokenBalance = ethers.utils.formatEther(balance);
-  //       console.log('balance ====> ', tokenBalance);
-  //       // setBalance(tokenBalance);
-  //       setBalanceLoading(false);
-  //     }
-  //   }
+    // const loadTokenBalance = async () => {
+    //   if (!!walletState?.wallet?.wallet) {
+    //     const provider = ethers.providers.getDefaultProvider();
+    //     console.log(provider);
+    //     window['provider'] = provider;
+    //     const balance: BigNumber = await provider.getBalance(walletState?.wallet?.wallet.address);
+    //     const tokenBalance = ethers.utils.formatEther(balance);
+    //     console.log('balance ====> ', tokenBalance);
+    //     setBalance(tokenBalance);
+    //     setBalanceLoading(false);
+    //   }
+    // }
   //   loadTokenBalance()
   // }, [wallet]);
 
   return (
     <Grid templateRows='5rem 1fr 4rem'>
-      <WalletHeader walletAddress={trimmedAddress} walletName={walletName} lockWallet={lockWallet} />
+      <WalletHeader walletAddress={trimmedAddress} onCopy={onCopy} hasCopied={hasCopied} walletName={walletName} lockWallet={lockWallet} />
       <VStack>
         {balanceLoading ?
           <Spinner size='xl' />
@@ -54,7 +54,7 @@ export const TokenList = () => {
               <StatHelpText>CRO</StatHelpText>
             </Stat>
         }
-        {/* <Button variant='solid' width="90%" justifySelf="flex-end" mt={20} onClick={() => deposit()}>Deposit in LP</Button> */}
+        {/* <Button variant='solid' width="90%" justifySelf="flex-end" mt={20} onClick={() => loadTokenBalance()}>Load Balance</Button> */}
       </VStack>
       <FooterNav />
     </Grid>

@@ -21,7 +21,8 @@ export function useBalance(): BalanceState {
   const setBalanceState = useSetRecoilState(balanceState);
 
   useEffect(() => {
-    const fetchBalance = async ({ provider, address }) => {
+    const fetchBalance = async ({ address }) => {
+      const provider = ethers.providers.getDefaultProvider();
       console.log('PROVIDER ===> ', provider);
       const _balance = await provider.getBalance(address)
       const balance = ethers.utils.formatEther(_balance)
@@ -29,7 +30,7 @@ export function useBalance(): BalanceState {
     }
     if (!!wallet) {
       const {provider, address} = wallet.wallet;
-      fetchBalance({ provider, address }).catch(console.error);
+      fetchBalance({ address }).catch(console.error);
     }
   }, [wallet]);
   return useRecoilValue(balanceState);

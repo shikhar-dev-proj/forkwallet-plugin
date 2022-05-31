@@ -11,7 +11,7 @@ const MNEMONIC_KEY = 'mnemonic'
 const WALLET_LAST_INDEX_KEY = 'lastIndex'
 const ENCODING = 'hex'
 const DERIVATION_PATH = "m/44'/60'/0'/0";
-const rpcURL = 'https://mainnet.infura.io/v3/';
+const rpcURL = 'https://mainnet.infura.io/v3/29b0a2e3567f4446bd0545f88818bdd7';
 
 export type InitWalletParams = {
   mnemonic: string;
@@ -38,34 +38,40 @@ export type UseWalletReturnType = {
 
 
 export function useWallet(): UseWalletReturnType {
+  const walletInState = useRecoilValue(walletState);
   const password = usePassword()
   const [wallet, setWallet] = useRecoilState(walletState)
+
   const [hasWallet, setHasWallet] = useState(false);
 
   useEffect(() => {
-    extension.storage.local.get([WALLET_KEY], (data) => {
-      const encryptedWallet = data[WALLET_KEY]
-      console.log('encrypted wallet ... : ', encryptedWallet);
-      if (!!encryptedWallet) {
-        setHasWallet(true);
-      } else {
-        setHasWallet(false);
-      }
-      if (!!encryptedWallet && !!password) {
-        console.log('encrypted wallet and password present ... :', encryptedWallet, password);
-        try {
-          const walletStr = decrypt(encryptedWallet, password)
-          console.log('decrypted wallet str ... : ', walletStr);
-          const decryptedWallet = JSON.parse(walletStr);
-          console.log('decrypted wallet ... : ', decryptedWallet);
-          setWallet(decryptedWallet);
-        } catch (err) {
-          console.log(err);
+    if (walletInState?.wallet) {
+      setHasWallet(true);
+    } else {
+      extension.storage.local.get([WALLET_KEY], (data) => {
+        const encryptedWallet = data[WALLET_KEY]
+        console.log('encrypted wallet ... : ', encryptedWallet);
+        if (!!encryptedWallet) {
+          setHasWallet(true);
+        } else {
+          setHasWallet(false);
         }
-      }
-    })
+        if (!!encryptedWallet && !!password) {
+          console.log('encrypted wallet and password present ... :', encryptedWallet, password);
+          try {
+            const walletStr = decrypt(encryptedWallet, password)
+            console.log('decrypted wallet str ... : ', walletStr);
+            const decryptedWallet = JSON.parse(walletStr);
+            console.log('decrypted wallet ... : ', decryptedWallet);
+            setWallet(decryptedWallet);
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      })
+    }
   }, [password]);
-  return {wallet, hasWallet};
+  return {wallet: useRecoilValue(walletState), hasWallet};
 }
 
 export function initWallet({ mnemonic, name, password }: InitWalletParams): void {
@@ -74,9 +80,9 @@ export function initWallet({ mnemonic, name, password }: InitWalletParams): void
 
   // create wallet address based on mnemonic
   const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic).derivePath(DERIVATION_PATH + '/' + 0)
-  const _wallet: ethers.Wallet = new ethers.Wallet(hdNode.privateKey)
-  const provider = ethers.providers.getDefaultProvider();
-  const wallet: ForkWallet = { name, index: 0, wallet: _wallet.connect(provider) }
+  const provider = ethers.providers.getDefaultProvider(rpcURL);
+  const _wallet: ethers.Wallet = new ethers.Wallet(hdNode.privateKey, provider)
+  const wallet: ForkWallet = { name, index: 0, wallet: _wallet }
   window['wallet'] = wallet;
 
   console.log('created wallet at 0 index ... : ', wallet);

@@ -1,9 +1,9 @@
 import { Divider, Flex, Grid, IconButton, Text } from "@chakra-ui/react";
 import { BsFillShieldLockFill } from "react-icons/bs";
-import { FaGalacticSenate, FaRegCopy } from "react-icons/fa";
+import { FaClipboardCheck, FaGalacticSenate, FaRegCopy } from "react-icons/fa";
 import { GiPadlock } from "react-icons/gi";
 
-export const WalletHeader = ({ walletName, walletAddress, lockWallet }) => {
+export const WalletHeader = ({ walletName, walletAddress, lockWallet, onCopy, hasCopied }) => {
   return (
     <Grid templateRows='4rem 1rem'>
       <Flex justifyContent='space-evenly' alignItems='center'>
@@ -12,7 +12,7 @@ export const WalletHeader = ({ walletName, walletAddress, lockWallet }) => {
           <Text fontSize='0.75rem' fontWeight={900}>{walletName}</Text>
           <Flex>
             <Text fontSize='0.75rem' mr='0.5rem'>{walletAddress}</Text>
-            <FaRegCopy />
+            {hasCopied ? <FaClipboardCheck color="green"/> : <FaRegCopy onClick={onCopy}/>}
           </Flex>
         </Grid>
         <IconButton aria-label='Lock' icon={<BsFillShieldLockFill />} onClick={lockWallet} />
