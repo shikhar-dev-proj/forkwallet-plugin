@@ -11,50 +11,49 @@ import { useEffect, useState } from "react";
 import BEEFY_ROUTER_ABI from '../abis/BeefyRouter.json';
 import { useWallet } from "hooks/useWallet";
 import { useSetPassword } from "hooks/usePassword";
+import { useBalance } from "hooks/useBalance";
 
 export const TokenList = () => {
 
-  const walletState = useWallet();
+  const walletState = useWallet()
   const setPassword = useSetPassword()
+  const { balance, balanceLoading } = useBalance();
   const wallet = walletState?.wallet?.wallet;
 
   const walletName = walletState?.wallet?.name;
   const walletAddress = wallet?.address;
   const trimmedAddress = walletAddress?.slice(0,4) + '....' + walletAddress?.slice(walletAddress.length-4, walletAddress.length);
 
-  const [balance, setBalance] = useState('');
-  const [coinSymbol, setCoinSymbol] = useState('');
-  const [coinName, setCoinName] = useState('');
-  const [balanceLoading, setBalanceLoading] = useState(true);
-
   const lockWallet = () => setPassword(undefined);
 
   // useEffect(() => {
   //   const loadTokenBalance = async () => {
-  //     if (provider) {
-
-  //       const balance: BigNumber = await provider?.getBalance('0x9DA3d18d1ae468Fe266D1E60b27Cd24f86FAe343');
+  //     if (!!wallet?.provider) {
+  //       const provider = wallet.provider;
+  //       console.log(provider);
+  //       debugger
+  //       const balance: BigNumber = await provider.getBalance(wallet.address);
   //       const tokenBalance = ethers.utils.formatEther(balance);
   //       console.log('balance ====> ', tokenBalance);
-  //       setBalance(tokenBalance);
+  //       // setBalance(tokenBalance);
   //       setBalanceLoading(false);
   //     }
   //   }
   //   loadTokenBalance()
-  // }, [connectedWallet]);
+  // }, [wallet]);
 
   return (
     <Grid templateRows='5rem 1fr 4rem'>
       <WalletHeader walletAddress={trimmedAddress} walletName={walletName} lockWallet={lockWallet} />
       <VStack>
-        {/* {balanceLoading ?
+        {balanceLoading ?
           <Spinner size='xl' />
           : <Stat height='fit-content'>
               <StatLabel>Account Balance</StatLabel>
               <StatNumber>{balance}</StatNumber>
               <StatHelpText>CRO</StatHelpText>
             </Stat>
-        } */}
+        }
         {/* <Button variant='solid' width="90%" justifySelf="flex-end" mt={20} onClick={() => deposit()}>Deposit in LP</Button> */}
       </VStack>
       <FooterNav />

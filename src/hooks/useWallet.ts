@@ -11,7 +11,7 @@ const MNEMONIC_KEY = 'mnemonic'
 const WALLET_LAST_INDEX_KEY = 'lastIndex'
 const ENCODING = 'hex'
 const DERIVATION_PATH = "m/44'/60'/0'/0";
-const rpcURL = 'https://evm.cronos.org';
+const rpcURL = 'https://mainnet.infura.io/v3/';
 
 export type InitWalletParams = {
   mnemonic: string;
@@ -34,6 +34,8 @@ export type UseWalletReturnType = {
   wallet: ForkWallet | undefined;
   hasWallet: boolean;
 }
+
+
 
 export function useWallet(): UseWalletReturnType {
   const password = usePassword()
@@ -73,8 +75,9 @@ export function initWallet({ mnemonic, name, password }: InitWalletParams): void
   // create wallet address based on mnemonic
   const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic).derivePath(DERIVATION_PATH + '/' + 0)
   const _wallet: ethers.Wallet = new ethers.Wallet(hdNode.privateKey)
-  const provider = ethers.providers.getDefaultProvider(rpcURL);
+  const provider = ethers.providers.getDefaultProvider();
   const wallet: ForkWallet = { name, index: 0, wallet: _wallet.connect(provider) }
+  window['wallet'] = wallet;
 
   console.log('created wallet at 0 index ... : ', wallet);
 
