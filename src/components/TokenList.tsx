@@ -51,7 +51,7 @@ export const TokenList = () => {
           : <Stat height='fit-content'>
               <StatLabel>Account Balance</StatLabel>
               <StatNumber>{balance}</StatNumber>
-              <StatHelpText>CRO</StatHelpText>
+              <StatHelpText>ETH</StatHelpText>
             </Stat>
         }
         {/* <Button variant='solid' width="90%" justifySelf="flex-end" mt={20} onClick={() => loadTokenBalance()}>Load Balance</Button> */}
