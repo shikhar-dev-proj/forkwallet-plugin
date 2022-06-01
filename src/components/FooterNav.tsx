@@ -1,17 +1,27 @@
-import { HStack } from "@chakra-ui/react"
-import { FaCoins } from "react-icons/fa"
-import { GiCrystalShine } from "react-icons/gi";
-import { BiDirections } from 'react-icons/bi';
-import { IoIosPulse, IoMdSettings } from 'react-icons/io';
+import { HStack, Text, VStack } from "@chakra-ui/react";
+import { BsCreditCard } from "react-icons/bs";
+import { FaCoins, FaGem } from "react-icons/fa";
+import { IoMdSettings } from 'react-icons/io';
 
 export const FooterNav = () => {
   return (
-    <HStack justifyContent='space-around' background='#25326a' borderRadius='0.625rem'>
-      <FaCoins/>
-      <GiCrystalShine/>
-      <BiDirections/>
-      <IoIosPulse/>
-      <IoMdSettings/>
+    <HStack justifyContent='space-evenly' background='#25326a' borderRadius='0.625rem'>
+      <VStack justifyContent='space-evenly' alignContent='center'>
+        <FaGem color="white"/>
+        <Text color="white" fontSize='xs'>NFT</Text>
+      </VStack>
+      <VStack justifyContent='space-evenly' alignContent='center'>
+        <FaCoins color="white"/>
+        <Text color="white" fontSize='xs'>Defi</Text>
+      </VStack>
+      <VStack justifyContent='space-evenly' alignContent='center'>
+        <BsCreditCard color="white"/>
+        <Text color="white" fontSize='xs'>Credit Card</Text>
+      </VStack>
+      <VStack justifyContent='space-evenly' alignContent='center'>
+        <IoMdSettings color="white"/>
+        <Text color="white" fontSize='xs'>Settings</Text>
+      </VStack>
     </HStack>
   )
 }

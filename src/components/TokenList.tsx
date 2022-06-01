@@ -26,22 +26,6 @@ export const TokenList = () => {
 
   const lockWallet = () => setPassword(undefined);
 
-  // useEffect(() => {
-    // const loadTokenBalance = async () => {
-    //   if (!!walletState?.wallet?.wallet) {
-    //     const provider = ethers.providers.getDefaultProvider();
-    //     console.log(provider);
-    //     window['provider'] = provider;
-    //     const balance: BigNumber = await provider.getBalance(walletState?.wallet?.wallet.address);
-    //     const tokenBalance = ethers.utils.formatEther(balance);
-    //     console.log('balance ====> ', tokenBalance);
-    //     setBalance(tokenBalance);
-    //     setBalanceLoading(false);
-    //   }
-    // }
-  //   loadTokenBalance()
-  // }, [wallet]);
-
   return (
     <Grid templateRows='5rem 1fr 4rem'>
       <WalletHeader walletAddress={trimmedAddress} onCopy={onCopy} hasCopied={hasCopied} walletName={walletName} lockWallet={lockWallet} />

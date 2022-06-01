@@ -1,5 +1,6 @@
 import { Button, Flex, Grid, Link, Spacer, Text, VStack } from "@chakra-ui/react"
 import { useSetPassword } from "hooks/usePassword"
+import { useTestPassword } from "hooks/useWallet"
 import { useState } from "react"
 import { BsFillShieldLockFill } from "react-icons/bs"
 import { FaGalacticSenate } from "react-icons/fa"
@@ -8,7 +9,17 @@ import { PasswordInput } from "./PasswordInput"
 
 export const UnlockWallet = () => {
   const [password, setPassword] = useState('');
+  const testPassword = useTestPassword();
   const unlockWalletWithPassword = useSetPassword();
+  const [error, setError] = useState(false);
+  const submitPassword = (password: string) => {
+    if (testPassword(password)) {
+      unlockWalletWithPassword(password);
+      setError(false);
+    } else {
+      setError(true);
+    }
+  }
   return (
     <>
       <Flex>
@@ -20,7 +31,7 @@ export const UnlockWallet = () => {
         <BsFillShieldLockFill size={100} />
         <Grid textAlign="center" mt={20}>
           <Text paddingBottom={8} fontWeight="bold">Unlock Wallet</Text>
-          <PasswordInput value={password} setValue={setPassword} />
+          <PasswordInput hasError={error} value={password} setValue={setPassword} />
           <Link
             justifySelf="flex-end"
             color="teal.500"
@@ -38,7 +49,7 @@ export const UnlockWallet = () => {
           justifySelf="flex-end"
           mt={20}
           disabled={!password}
-          onClick={() => unlockWalletWithPassword(password)}>Unlock</Button>
+          onClick={() => submitPassword(password)}>Unlock</Button>
       </VStack>
     </>
   )

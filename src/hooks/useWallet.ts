@@ -117,6 +117,32 @@ export function storeLastIndex() {
   });
 }
 
+export function useTestPassword(): (password: string) => boolean {
+  const [seed, setSeed] = useState('');
+  useEffect(() => {
+    console.log('CALLING GET FOR MNEMONIC STORED');
+    extension.storage.local.get([MNEMONIC_KEY], (data) => {
+      const seed = data[MNEMONIC_KEY] ?? {};
+      console.log('GOT STORED MNEMONIC ====> ', seed);
+      setSeed(seed);
+    });
+  }, [])
+
+  const testPassword = (password: string): boolean => {
+    try {
+      const decrypted = decrypt(seed, password);
+      if (ethers.utils.isValidMnemonic(decrypted)) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch {
+      return false;
+    }
+  };
+  return testPassword;
+}
+
 export function useMnemonic(password: string): string {
   const [mnemonic, setMnemonic] = useState<string>('');
 
