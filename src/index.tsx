@@ -13,7 +13,7 @@ const root = createRoot(document.getElementById("root"));
 
 root.render(
   <StrictMode>
-    <ColorModeScript initialColorMode="dark" />
+    <ColorModeScript initialColorMode="light" />
       <ChakraProvider theme={theme}>
         {/* <Provider store={store}> */}
           <RecoilRoot>
