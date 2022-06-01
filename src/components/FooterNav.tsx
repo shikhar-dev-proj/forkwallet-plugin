@@ -26,7 +26,6 @@ export const FooterNav = () => {
           <IoMdSettings color="white"/>
         </Box>
       </Tooltip>
-        <IoMdSettings color="white"/>
     </HStack>
   )
 }
