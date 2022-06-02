@@ -1,6 +1,5 @@
 import { ethers } from "ethers";
 import { useEffect } from "react";
-import { useQuery } from "react-query";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 import { useInterval } from "./common/useInterval";
 import { useWallet } from "./useWallet";
