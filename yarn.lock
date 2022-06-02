@@ -12603,7 +12603,7 @@
     "randombytes" "^2.1.0"
     "utf8" "3.0.0"
 
-"web3@^1", "web3@^1.7.3":
+"web3@^1":
   "integrity" "sha512-UgBvQnKIXncGYzsiGacaiHtm0xzQ/JtGqcSO/ddzQHYxnNuwI72j1Pb4gskztLYihizV9qPNQYHMSCiBlStI9A=="
   "resolved" "https://registry.npmjs.org/web3/-/web3-1.7.3.tgz"
   "version" "1.7.3"
@@ -12615,11 +12615,6 @@
     "web3-net" "1.7.3"
     "web3-shh" "1.7.3"
     "web3-utils" "1.7.3"
-
-"webextension-polyfill@^0.9.0":
-  "integrity" "sha512-LTtHb0yR49xa9irkstDxba4GATDAcDw3ncnFH9RImoFwDlW47U95ME5sn5IiQX2ghfaECaf6xyXM8yvClIBkkw=="
-  "resolved" "https://registry.npmjs.org/webextension-polyfill/-/webextension-polyfill-0.9.0.tgz"
-  "version" "0.9.0"
 
 "webidl-conversions@^3.0.0":
   "integrity" "sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE="
