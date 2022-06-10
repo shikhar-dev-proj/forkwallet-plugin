@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import { useWallet } from "./useWallet";
 import ERC20_ABI from './../abis/ERC20.json';
+import { supportedChains } from "const";
 
 // consume sendAddress, trasnferAmount
 export function useTransfer() {
@@ -8,8 +9,8 @@ export function useTransfer() {
   const { wallet } = useWallet()
   const w = wallet?.wallet;
 
-  const transfer = async (tokenAmount: string, toAddress: string, contractAddress: string) => {
-    const provider = w?.provider
+  const transfer = async (tokenAmount: string, toAddress: string, contractAddress?: string) => {
+    const provider = new ethers.providers.InfuraProvider('goerli', supportedChains[1].apikey);
     const gasPrice = await provider?.getGasPrice()
     if (contractAddress) {
       let contract = new ethers.Contract(contractAddress, ERC20_ABI.abi, w)
@@ -21,6 +22,7 @@ export function useTransfer() {
         const tx = await contract.transfer(toAddress, numberOfTokens);
         const txReceipt = await tx.wait();
         console.log('transaction receipt .... : ', txReceipt);
+        return txReceipt;
       } catch(e) {
         console.error('Error Message : ', e);
       }
@@ -39,18 +41,18 @@ export function useTransfer() {
       }
       console.log('TX .... : ', tx)
       try {
-        w!.sendTransaction(tx).then((transaction) => {
-          console.log('sent transaction .... : ', transaction)
+        w!.sendTransaction(tx).then((receipt) => {
+          console.log('sent transaction .... : ', receipt)
+          return receipt
         })
       } catch (error) {
-        console.error('Error ocurred .... ')
+        console.error('Error ocurred .... ', error);
       }
     }
   }
 
   return transfer;
 
-  // w.s/
   
 }
 // fetch latest of wallet

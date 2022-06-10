@@ -28,7 +28,8 @@ export const ImportWallet = ({ setAddWalletOption }) => {
     const [importWalletScreen, setImportWalletScreen] = useState(0);
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
-    const [repeatPassword, setRepeatPassword] = useState('');
+    const [repeatPassword, setRepeatPassword]
+    = useState('');
     const [areCredentialsValid, setAreCredentialsValid] = useState(false);
   
     return (
