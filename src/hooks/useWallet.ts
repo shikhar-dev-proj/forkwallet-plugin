@@ -5,13 +5,14 @@ import { decrypt, encrypt } from '../utils/crypto';
 import * as bip39 from 'bip39';
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { usePassword } from './usePassword';
+import { supportedChains } from 'const';
 
 const WALLET_KEY = 'wallet'
 const MNEMONIC_KEY = 'mnemonic'
 const WALLET_LAST_INDEX_KEY = 'lastIndex'
 const ENCODING = 'hex'
 const DERIVATION_PATH = "m/44'/60'/0'/0";
-const rpcURL = 'https://mainnet.infura.io/v3/29b0a2e3567f4446bd0545f88818bdd7';
+// const rpcURL = 'https://goerli.infura.io/v3/29b0a2e3567f4446bd0545f88818bdd7';
 
 export type InitWalletParams = {
   mnemonic: string;
@@ -22,7 +23,8 @@ export type InitWalletParams = {
 export type ForkWallet = {
   name: string;
   index: number;
-  wallet: ethers.Wallet
+  wallet: ethers.Wallet;
+  provider: any;
 }
 
 const walletState = atom<ForkWallet | undefined>({
@@ -35,12 +37,10 @@ export type UseWalletReturnType = {
   hasWallet: boolean;
 }
 
-
-
 export function useWallet(): UseWalletReturnType {
   const walletInState = useRecoilValue(walletState);
   const password = usePassword()
-  const [wallet, setWallet] = useRecoilState(walletState)
+  const setWallet = useSetRecoilState(walletState)
 
   const [hasWallet, setHasWallet] = useState(false);
 
@@ -80,9 +80,9 @@ export function initWallet({ mnemonic, name, password }: InitWalletParams): void
 
   // create wallet address based on mnemonic
   const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic).derivePath(DERIVATION_PATH + '/' + 0)
-  const provider = ethers.providers.getDefaultProvider(rpcURL);
-  const _wallet: ethers.Wallet = new ethers.Wallet(hdNode.privateKey, provider)
-  const wallet: ForkWallet = { name, index: 0, wallet: _wallet }
+  const infuraProvider = new ethers.providers.InfuraProvider('goerli', supportedChains[1].apikey);
+  const _wallet: ethers.Wallet = new ethers.Wallet(hdNode.privateKey, infuraProvider)
+  const wallet: ForkWallet = { name, index: 0, wallet: _wallet, provider: infuraProvider }
   window['wallet'] = wallet;
 
   console.log('created wallet at 0 index ... : ', wallet);

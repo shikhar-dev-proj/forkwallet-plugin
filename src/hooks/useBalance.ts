@@ -1,3 +1,4 @@
+import { supportedChains } from "const";
 import { ethers } from "ethers";
 import { useEffect } from "react";
 import { atom, useRecoilValue, useSetRecoilState } from "recoil";
@@ -26,8 +27,8 @@ export function useBalance(): BalanceState {
       if (!!wallet) {
         const { address } = wallet.wallet;
         setBalanceState({ balance: currentBalanceState, balanceLoading: true })
-        const provider = ethers.providers.getDefaultProvider()
-        const _balance = await provider.getBalance(address)
+        const infuraProvider = new ethers.providers.InfuraProvider('goerli', supportedChains[1].apikey);
+        const _balance = await infuraProvider.getBalance(address)
         const balance = ethers.utils.formatEther(_balance)
         setBalanceState({ balance, balanceLoading: false });
       }

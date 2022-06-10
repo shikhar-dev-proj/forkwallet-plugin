@@ -1,16 +1,12 @@
 import {
   Box, Grid
 } from "@chakra-ui/react";
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useInitPasswordState, usePassword } from "hooks/usePassword";
+import { useWallet } from "hooks/useWallet";
+import React, { useState } from "react";
 import { AddWallet } from "./components/AddWallet";
 import { TokenList } from "./components/TokenList";
 import { UnlockWallet } from './components/UnlockWallet';
-import { LoadWeb3 } from "./store/web3/action-creator";
-import * as bip39 from 'bip39';
-import { HashRouter, Route } from 'react-router-dom';
-import { useInitPasswordState, usePassword } from "hooks/usePassword";
-import { useWallet } from "hooks/useWallet";
 
 // export const RenderPageBasedOnState = () => {
 //   const walletState = useSelector((state: AppState) => state.wallet);

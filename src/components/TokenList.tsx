@@ -1,46 +1,80 @@
-import { Button, extendTheme, Grid, Spacer, Spinner, Stat, StatHelpText, StatLabel, StatNumber, useClipboard, VStack } from "@chakra-ui/react"
-import { FooterNav } from "./FooterNav"
-import { WalletHeader } from "./WalletHeader"
-import CronosMock from '../abis/CronosMock.json';
-import BEEFY_UNISWAP_ABI from '../abis/BeefyZapUniswapV2.json';
-import BEEFY_VAULT_ABI from '../abis/BeefyVaultV6.json';
-import ERC20_ABI from '../abis/ERC20.json';
-import { ethers, Signer, BigNumber } from "ethers";
-import { CreateWalletFromMnemonic } from "../store/wallet/action-creator";
-import { useEffect, useState } from "react";
-import BEEFY_ROUTER_ABI from '../abis/BeefyRouter.json';
-import { useWallet } from "hooks/useWallet";
-import { useSetPassword } from "hooks/usePassword";
+import { Button, Grid, Input, InputGroup, InputRightAddon, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stat, StatHelpText, StatLabel, StatNumber, useClipboard, useDisclosure, VStack } from "@chakra-ui/react";
 import { useBalance } from "hooks/useBalance";
+import { useSetPassword } from "hooks/usePassword";
+import { useWallet } from "hooks/useWallet";
+import { useState } from "react";
+import { FooterNav } from "./FooterNav";
+import { WalletHeader } from "./WalletHeader";
+
+export const SendModal = ({ isOpen, onClose, sendAddress, setSendAddress, transferAmount, setTransferAmount, maxBalance }) => {
+  return (
+    <Modal size='sm' isCentered isOpen={isOpen} onClose={onClose}>
+      <ModalOverlay />
+      <ModalContent w='90%'>
+        <ModalHeader>Send Ether</ModalHeader>
+        {/* <ModalCloseButton /> */}
+        <ModalBody>
+          <Input placeholder='Enter Address' value={sendAddress} onChange={(e) => setSendAddress(e.target.value)}></Input>
+          <InputGroup marginTop={2} size='md' borderRadius={2}>
+            <Input placeholder='Enter Value' value={transferAmount} onChange={(e) => setTransferAmount(e.target.value)}/>
+            <InputRightAddon children='ETH' />
+          </InputGroup>
+        </ModalBody>
+
+        <ModalFooter>
+          <Button 
+            colorScheme='blue'
+            mr={3}
+            disabled={!sendAddress || !transferAmount || transferAmount >= maxBalance}
+            isLoading={true}
+            onClick={() => {}}>
+            Send
+          </Button>
+          <Button variant='ghost' onClick={onClose}>Cancel</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+  )
+}
 
 export const TokenList = () => {
 
   const walletState = useWallet()
   const setPassword = useSetPassword()
   const { balance, balanceLoading } = useBalance();
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const wallet = walletState?.wallet?.wallet;
   const walletName = walletState?.wallet?.name;
   const walletAddress = wallet?.address;
   const { hasCopied, onCopy } = useClipboard(walletAddress!);
   const trimmedAddress = walletAddress?.slice(0,4) + '....' + walletAddress?.slice(walletAddress.length-4, walletAddress.length);
 
+  const [sendAddress, setSendAddress] = useState('');
+  const [transferAmount, setTransferAmount] = useState('');
+
   const lockWallet = () => setPassword(undefined);
 
   return (
     <Grid templateRows='5rem 1fr 4rem'>
       <WalletHeader walletAddress={trimmedAddress} onCopy={onCopy} hasCopied={hasCopied} walletName={walletName} lockWallet={lockWallet} />
-      <VStack>
-        {balanceLoading ?
-          <Spinner size='xl' />
-          : <Stat height='fit-content'>
-              <StatLabel>Account Balance</StatLabel>
-              <StatNumber>{balance}</StatNumber>
-              <StatHelpText>ETH</StatHelpText>
-            </Stat>
-        }
-        {/* <Button variant='solid' width="90%" justifySelf="flex-end" mt={20} onClick={() => loadTokenBalance()}>Load Balance</Button> */}
+      <VStack m={2}>
+        <Stat height='fit-content'>
+          <StatLabel>Account Balance</StatLabel>
+          <StatNumber>{balanceLoading ? <Spinner size='sm'/> : balance}</StatNumber>
+          <StatHelpText>ETH</StatHelpText>
+        </Stat>
+        <Button variant='solid' mt={20} onClick={onOpen}>Send</Button>
       </VStack>
       <FooterNav />
+      <SendModal 
+        isOpen={isOpen}
+        onClose={onClose}
+        sendAddress={sendAddress}
+        setSendAddress={setSendAddress}
+        transferAmount={transferAmount}
+        setTransferAmount={setTransferAmount}
+        maxBalance={balance}
+        />
     </Grid>
   )
 }
