@@ -14,13 +14,13 @@ const root = createRoot(document.getElementById("root"));
 root.render(
   <StrictMode>
     <ColorModeScript initialColorMode="light" />
-      <ChakraProvider theme={theme}>
-        {/* <Provider store={store}> */}
-          <RecoilRoot>
-            <App />
-          </RecoilRoot>
-        {/* </Provider> */}
-      </ChakraProvider>
+    <ChakraProvider theme={theme}>
+      {/* <Provider store={store}> */}
+      <RecoilRoot>
+        <App />
+      </RecoilRoot>
+      {/* </Provider> */}
+    </ChakraProvider>
   </StrictMode>
 )
 

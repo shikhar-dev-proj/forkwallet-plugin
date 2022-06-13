@@ -24,7 +24,6 @@ export type ForkWallet = {
   name: string;
   index: number;
   wallet: ethers.Wallet;
-  provider: any;
 }
 
 const walletState = atom<ForkWallet | undefined>({
@@ -33,7 +32,7 @@ const walletState = atom<ForkWallet | undefined>({
 });
 
 export type UseWalletReturnType = {
-  wallet: ForkWallet | undefined;
+  wallet?: ForkWallet;
   hasWallet: boolean;
 }
 
@@ -45,25 +44,28 @@ export function useWallet(): UseWalletReturnType {
   const [hasWallet, setHasWallet] = useState(false);
 
   useEffect(() => {
-    if (walletInState?.wallet) {
+    if (walletInState) {
       setHasWallet(true);
     } else {
       extension.storage.local.get([WALLET_KEY], (data) => {
-        const encryptedWallet = data[WALLET_KEY]
-        console.log('encrypted wallet ... : ', encryptedWallet);
-        if (!!encryptedWallet) {
+        const encryptedWalletKey = data[WALLET_KEY]
+        console.log('encrypted wallet ... : ', encryptedWalletKey);
+        if (!!encryptedWalletKey) {
           setHasWallet(true);
         } else {
           setHasWallet(false);
         }
-        if (!!encryptedWallet && !!password) {
-          console.log('encrypted wallet and password present ... :', encryptedWallet, password);
+        if (!!encryptedWalletKey && !!password) {
+          console.log('encrypted wallet and password present ... :', encryptedWalletKey, password);
           try {
-            const walletStr = decrypt(encryptedWallet, password)
-            console.log('decrypted wallet str ... : ', walletStr);
-            const decryptedWallet = JSON.parse(walletStr);
-            console.log('decrypted wallet ... : ', decryptedWallet);
-            setWallet(decryptedWallet);
+            const walletStr = decrypt(encryptedWalletKey, password)
+            console.log('decrypted wallet ... : ', JSON.parse(walletStr))
+            const { name, index, key } = JSON.parse(walletStr)
+            const infuraProvider = new ethers.providers.InfuraProvider('goerli', supportedChains[1].apikey)
+            const etherWallet = (new ethers.Wallet(key)).connect(infuraProvider)
+            console.log('decrypted wallet ... : ', name, index, key)
+            const forkWallet = { name, index, wallet: etherWallet }
+            setWallet(forkWallet)
           } catch (err) {
             console.log(err);
           }
@@ -71,7 +73,10 @@ export function useWallet(): UseWalletReturnType {
       })
     }
   }, [password]);
-  return {wallet: useRecoilValue(walletState), hasWallet};
+  return {
+    wallet: useRecoilValue(walletState),
+    hasWallet
+  };
 }
 
 export function initWallet({ mnemonic, name, password }: InitWalletParams): void {
@@ -80,10 +85,9 @@ export function initWallet({ mnemonic, name, password }: InitWalletParams): void
 
   // create wallet address based on mnemonic
   const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic).derivePath(DERIVATION_PATH + '/' + 0)
-  const infuraProvider = new ethers.providers.InfuraProvider('goerli', supportedChains[1].apikey);
-  const _wallet: ethers.Wallet = new ethers.Wallet(hdNode.privateKey, infuraProvider)
-  const wallet: ForkWallet = { name, index: 0, wallet: _wallet, provider: infuraProvider }
-  window['wallet'] = wallet;
+  const _wallet: ethers.Wallet = new ethers.Wallet(hdNode.privateKey)
+  const wallet = { name, index: 0, key: _wallet.privateKey }
+  window['wallet'] = _wallet;
 
   console.log('created wallet at 0 index ... : ', wallet);
 
@@ -91,8 +95,8 @@ export function initWallet({ mnemonic, name, password }: InitWalletParams): void
   storeWallet(wallet, password);
 }
 
-export function storeWallet(forkWallet: ForkWallet, password: string) {
-  const encryptedWallet = encrypt(JSON.stringify(forkWallet), password);
+export function storeWallet(wallet: {name: string, key: string, index: number }, password: string) {
+  const encryptedWallet = encrypt(JSON.stringify(wallet), password);
   console.log('storing encrypted wallet .... : ', encryptedWallet);
   extension.storage.local.set({
     [WALLET_KEY]: encryptedWallet
