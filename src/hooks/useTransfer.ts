@@ -11,8 +11,10 @@ export function useTransfer() {
 
   const transfer = async (tokenAmount: string, toAddress: string, contractAddress?: string) => {
     if(!!w) {
+      debugger
       const provider = w?.provider;
       const gasPrice = await w?.provider?.getGasPrice()
+      console.log('GAS, WALLET, PROVIDER =>', gasPrice, w, provider);
       if (contractAddress) {
         let contract = new ethers.Contract(contractAddress, ERC20_ABI.abi, w)
         // How many tokens?
@@ -29,7 +31,8 @@ export function useTransfer() {
         }
   
       } else {
-        const nonce = await w?.provider!.getTransactionCount(w!.address,"latest")
+        console.log('PROVIDER ===> ', provider)
+        const nonce = await provider!.getTransactionCount(w!.address,"latest")
         try {
           const tx = {
             from: w?.address,
@@ -40,12 +43,12 @@ export function useTransfer() {
             gasPrice
           }
           console.log('TX .... : ', tx)
-          w!.sendTransaction(tx).then((receipt) => {
-            console.log('sent transaction .... : ', receipt)
-            return receipt
-          })
+          const receipt = await w!.sendTransaction(tx)
+          console.log('sent transaction .... : ', receipt)
+          return receipt
         } catch (error) {
           console.error('Error ocurred .... ', error);
+          return error;
         }
       }
     }

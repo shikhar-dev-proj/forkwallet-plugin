@@ -61,7 +61,8 @@ export function useWallet(): UseWalletReturnType {
             const walletStr = decrypt(encryptedWalletKey, password)
             console.log('decrypted wallet ... : ', JSON.parse(walletStr))
             const { name, index, key } = JSON.parse(walletStr)
-            const etherWallet = new ethers.Wallet(key)
+            const infuraProvider = new ethers.providers.InfuraProvider('goerli', supportedChains[1].apikey)
+            const etherWallet = (new ethers.Wallet(key)).connect(infuraProvider)
             console.log('decrypted wallet ... : ', name, index, key)
             const forkWallet = { name, index, wallet: etherWallet }
             setWallet(forkWallet)
@@ -84,8 +85,7 @@ export function initWallet({ mnemonic, name, password }: InitWalletParams): void
 
   // create wallet address based on mnemonic
   const hdNode = ethers.utils.HDNode.fromMnemonic(mnemonic).derivePath(DERIVATION_PATH + '/' + 0)
-  const infuraProvider = new ethers.providers.InfuraProvider('goerli', supportedChains[1].apikey);
-  const _wallet: ethers.Wallet = new ethers.Wallet(hdNode.privateKey, infuraProvider)
+  const _wallet: ethers.Wallet = new ethers.Wallet(hdNode.privateKey)
   const wallet = { name, index: 0, key: _wallet.privateKey }
   window['wallet'] = _wallet;
 

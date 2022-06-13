@@ -1,9 +1,10 @@
-import { Button, Grid, Input, InputGroup, InputRightAddon, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, useClipboard, useDisclosure, VStack } from "@chakra-ui/react";
+import { Button, Grid, Heading, Input, InputGroup, InputRightAddon, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, useClipboard, useDisclosure, useToast, VStack } from "@chakra-ui/react";
 import { useBalance } from "hooks/useBalance";
 import { useSetPassword } from "hooks/usePassword";
 import { useTransfer } from "hooks/useTransfer";
 import { useWallet } from "hooks/useWallet";
 import { useState } from "react";
+import { IoIosLink } from "react-icons/io";
 import { FooterNav } from "./FooterNav";
 import { WalletHeader } from "./WalletHeader";
 
@@ -24,19 +25,13 @@ export const SendModal = ({
         <ModalOverlay />
         <ModalContent w='90%'>
           <ModalHeader>Send Ether</ModalHeader>
-          {/* <ModalCloseButton /> */}
-          {!sendComplete ?
-            <ModalBody>
-              <Input placeholder='Enter Address' value={sendAddress} onChange={(e) => setSendAddress(e.target.value)}></Input>
-              <InputGroup marginTop={2} size='md' borderRadius={2}>
-                <Input placeholder='Enter Value' value={transferAmount} onChange={(e) => setTransferAmount(e.target.value)}/>
-                <InputRightAddon children='ETH' />
-              </InputGroup>
-            </ModalBody>
-          : <ModalBody>
-              <Text>Success</Text>
-            </ModalBody>
-          }
+          <ModalBody>
+            <Input placeholder='Enter Address' value={sendAddress} onChange={(e) => setSendAddress(e.target.value)}></Input>
+            <InputGroup marginTop={2} size='md' borderRadius={2}>
+              <Input placeholder='Enter Value' value={transferAmount} onChange={(e) => setTransferAmount(e.target.value)}/>
+              <InputRightAddon children='ETH' />
+            </InputGroup>
+          </ModalBody>
   
           <ModalFooter>
             <Button 
@@ -73,18 +68,33 @@ export const TokenList = () => {
   const lockWallet = () => setPassword(undefined);
   const [sendInProgress, setSendInProgress] = useState(false);
   const transfer = useTransfer();
+  const toast = useToast()
 
 
   const initiateTransfer = async () => {
     setSendInProgress(true);
     try {
       const sendReceipt = await transfer(transferAmount, sendAddress);
+      console.log('SEND RECEIPT =====> ', sendReceipt)
       if (!!sendReceipt) {
         setSendComplete(true);
+        onClose()
+        const txURL = `https://goerli.etherscan.io/tx/${sendReceipt.hash}`;
+        setSendInProgress(false);
+        toast({
+          title: 'Transfer Complete',
+          description: `Fetch transaction from: ${txURL}`,
+          position: 'top',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+          containerStyle: {
+            maxWidth: '90%'
+          }
+        })
       }
     } catch (err) {
       console.error(err)
-    } finally {
       setSendInProgress(false);
     }
   }
