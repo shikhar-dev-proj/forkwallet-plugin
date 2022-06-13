@@ -10,43 +10,43 @@ export function useTransfer() {
   const w = wallet?.wallet;
 
   const transfer = async (tokenAmount: string, toAddress: string, contractAddress?: string) => {
-    const provider = new ethers.providers.InfuraProvider('goerli', supportedChains[1].apikey);
-    const gasPrice = await provider?.getGasPrice()
-    if (contractAddress) {
-      let contract = new ethers.Contract(contractAddress, ERC20_ABI.abi, w)
-      // How many tokens?
-      let numberOfTokens = ethers.utils.parseUnits(tokenAmount, 18)
-      console.log(`numberOfTokens: ${numberOfTokens}`)
-
-      try {
-        const tx = await contract.transfer(toAddress, numberOfTokens);
-        const txReceipt = await tx.wait();
-        console.log('transaction receipt .... : ', txReceipt);
-        return txReceipt;
-      } catch(e) {
-        console.error('Error Message : ', e);
-      }
-
-    } else {
-      const tx = {
-        from: w?.address,
-        to: toAddress,
-        value: ethers.utils.parseEther(tokenAmount),
-        nonce: provider!.getTransactionCount(
-          w!.address,
-          "latest"
-        ),
-        gasLimit: ethers.utils.hexlify(100000),
-        gasPrice
-      }
-      console.log('TX .... : ', tx)
-      try {
-        w!.sendTransaction(tx).then((receipt) => {
-          console.log('sent transaction .... : ', receipt)
-          return receipt
-        })
-      } catch (error) {
-        console.error('Error ocurred .... ', error);
+    if(!!w) {
+      const provider = w?.provider;
+      const gasPrice = await w?.provider?.getGasPrice()
+      if (contractAddress) {
+        let contract = new ethers.Contract(contractAddress, ERC20_ABI.abi, w)
+        // How many tokens?
+        let numberOfTokens = ethers.utils.parseUnits(tokenAmount, 18)
+        console.log(`numberOfTokens: ${numberOfTokens}`)
+  
+        try {
+          const tx = await contract.transfer(toAddress, numberOfTokens);
+          const txReceipt = await tx.wait();
+          console.log('transaction receipt .... : ', txReceipt);
+          return txReceipt;
+        } catch(e) {
+          console.error('Error Message : ', e);
+        }
+  
+      } else {
+        const nonce = await w?.provider!.getTransactionCount(w!.address,"latest")
+        try {
+          const tx = {
+            from: w?.address,
+            to: toAddress,
+            value: ethers.utils.parseEther(tokenAmount),
+            nonce,
+            gasLimit: ethers.utils.hexlify(100000),
+            gasPrice
+          }
+          console.log('TX .... : ', tx)
+          w!.sendTransaction(tx).then((receipt) => {
+            console.log('sent transaction .... : ', receipt)
+            return receipt
+          })
+        } catch (error) {
+          console.error('Error ocurred .... ', error);
+        }
       }
     }
   }
