@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import { useWallet } from "./useWallet";
 import ERC20_ABI from './../abis/ERC20.json';
 import { supportedChains } from "const";
+import extension from 'extensionizer';
 
 // consume sendAddress, trasnferAmount
 export function useTransfer() {
@@ -11,7 +12,6 @@ export function useTransfer() {
 
   const transfer = async (tokenAmount: string, toAddress: string, contractAddress?: string) => {
     if(!!w) {
-      debugger
       const provider = w?.provider;
       const gasPrice = await w?.provider?.getGasPrice()
       console.log('GAS, WALLET, PROVIDER =>', gasPrice, w, provider);
@@ -45,6 +45,18 @@ export function useTransfer() {
           console.log('TX .... : ', tx)
           const receipt = await w!.sendTransaction(tx)
           console.log('sent transaction .... : ', receipt)
+          console.log('Hook Document and Window =======> ', document, window);
+          console.log(extension, extension.notifications);
+          extension.runtime.sendMessage('', {
+            type: 'notification',
+            options: {
+              title: 'Transfer Complete',
+              message: 'Ether Transfer Successful',
+              iconUrl: '/icon.png',
+              type: 'basic'
+            }
+          });
+          document.dispatchEvent(new CustomEvent('sent', { detail: { transactionHash: receipt.hash } }))
           return receipt
         } catch (error) {
           console.error('Error ocurred .... ', error);
