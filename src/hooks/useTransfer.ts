@@ -45,18 +45,17 @@ export function useTransfer() {
           console.log('TX .... : ', tx)
           const receipt = await w!.sendTransaction(tx)
           console.log('sent transaction .... : ', receipt)
-          console.log('Hook Document and Window =======> ', document, window);
-          console.log(extension, extension.notifications);
-          extension.runtime.sendMessage('', {
-            type: 'notification',
-            options: {
-              title: 'Transfer Complete',
-              message: 'Ether Transfer Successful',
-              iconUrl: '/icon.png',
-              type: 'basic'
-            }
-          });
-          document.dispatchEvent(new CustomEvent('sent', { detail: { transactionHash: receipt.hash } }))
+          // extension.runtime.sendMessage('', {
+          //   type: 'notification',
+          //   options: {
+          //     title: 'Transfer Complete',
+          //     message: 'Ether Transfer Successful',
+          //     iconUrl: '/icon.png',
+          //     type: 'basic'
+          //   }
+          // });
+          
+          window.dispatchEvent(new CustomEvent('transfer', { detail: { transactionHash: receipt.hash } }))
           return receipt
         } catch (error) {
           console.error('Error ocurred .... ', error);
