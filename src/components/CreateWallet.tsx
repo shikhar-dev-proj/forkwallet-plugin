@@ -1,9 +1,11 @@
-import { Badge, Box, Button, Checkbox, Container, Divider, Grid, HStack, Input, List, ListIcon, ListItem, Spacer, Text, VStack } from "@chakra-ui/react";
+import { Badge, Box, Button, Checkbox, Container, Divider, Grid, HStack, Image, Input, List, ListIcon, ListItem, Spacer, Text, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { MdContentCopy, MdSettings } from "react-icons/md";
 import { generateMnemonic } from "../hooks/useWallet";
 import { CreateWalletSuccess } from "./CreateWalletSuccess";
 import { WalletCredentials } from "./WalletCredentials";
+import '@fontsource/inter';
+import { IoMdArrowBack } from "react-icons/io";
 
 
 const CreateWalletSeedPhrase = ({ mnemonic, setSeedPhraseCopied }) => {
@@ -90,10 +92,12 @@ const ActionBar = ({
   onSubmit
 }) => {
   return (
-    <Grid templateColumns='5rem 1fr 5rem'>
-      <Button variant='outline' onClick={() => createWalletScreen !== 0 ? setCreateWalletScreen(createWalletScreen - 1) : setAddWalletOption('')}>Cancel</Button>
-      <Spacer />
+    <Grid templateRows='1rem 3rem 3rem' gap='1rem' width='100%'>
+      <Image src='/divider.svg' />
       <Button 
+        height={12} 
+        borderRadius='4px' 
+        colorScheme='primary' 
         variant='solid'
         disabled={
           createWalletScreen === 0 ? !areCredentialsValid 
@@ -102,6 +106,7 @@ const ActionBar = ({
         }
         onClick={() => createWalletScreen !== 2 ? setCreateWalletScreen(createWalletScreen + 1) : onSubmit()}
         >{createWalletScreen === 2 ? 'Submit' : 'Next'}</Button>
+      <Button borderRadius='4px' colorScheme='secondary' variant='solid' height={12} onClick={() => createWalletScreen !== 0 ? setCreateWalletScreen(createWalletScreen - 1) : setAddWalletOption('')}>Cancel</Button>
     </Grid>
   )
 }
@@ -136,10 +141,14 @@ export const CreateWallet = ({ setAddWalletOption, createWallet }) => {
   }, [name, password, repeatPassword])
 
   return (
-    <Grid p={3} templateRows='4rem 1fr 3rem'>
+    <Grid p={3} templateRows='5rem 1fr 9rem'>
       <VStack spacing={1}>
-        <Text borderBottom=''>{createWalletScreen !== 3 ? 'Create Wallet' : 'Wallet Created'}</Text>
-        <Divider />
+        <Grid gridTemplateColumns='1rem 4rem 7rem 5rem'>
+          <IoMdArrowBack size='md' color='white' onClick={() => setAddWalletOption('')}/>
+          <Spacer/>
+          <Text fontSize="md" size="md" fontWeight={600} color='white'>{createWalletScreen !== 3 ? 'Create wallet' : 'Wallet Created'}</Text>
+          <Spacer/>
+        </Grid>
       </VStack>
       {createWalletScreen === 0 ? 
         <WalletCredentials setName={setName} setPassword={setPassword} setRepeatPassword={setRepeatPassword}/> 

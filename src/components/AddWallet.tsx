@@ -17,8 +17,8 @@ const AddWalletOptions = ({ setAddWalletOption }) => {
       </Grid>
       <Grid gridGap={5} width='90%'>
         <Image mt={20} src='/divider.svg' />
-        <Button borderRadius='4px' colorScheme='primary' variant='solid' onClick={() => {setAddWalletOption('create')}}>Create Wallet</Button>
-        <Button borderRadius='4px' colorScheme='secondary' variant='solid' onClick={() => {setAddWalletOption('import')}}>Import with Seed Phrase</Button>
+        <Button height={12} borderRadius='4px' colorScheme='primary' variant='solid' onClick={() => {setAddWalletOption('create')}}>Create Wallet</Button>
+        <Button height={12} borderRadius='4px' colorScheme='secondary' variant='solid' onClick={() => {setAddWalletOption('import')}}>Import with Seed Phrase</Button>
       </Grid>
     </VStack>
   )
