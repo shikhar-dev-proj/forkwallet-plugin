@@ -1,4 +1,4 @@
-import { Button, Flex, Grid, Link, Spacer, Text, VStack } from "@chakra-ui/react"
+import { Box, Button, Flex, Grid, Link, Spacer, Text, VStack } from "@chakra-ui/react"
 import { useSetPassword } from "hooks/usePassword"
 import { useTestPassword } from "hooks/useWallet"
 import { useState } from "react"
@@ -21,7 +21,7 @@ export const UnlockWallet = () => {
     }
   }
   return (
-    <>
+    <Box>
       <Flex>
         <FaGalacticSenate size={50} />
         <Spacer />
@@ -51,6 +51,6 @@ export const UnlockWallet = () => {
           disabled={!password}
           onClick={() => submitPassword(password)}>Unlock</Button>
       </VStack>
-    </>
+    </Box>
   )
 }

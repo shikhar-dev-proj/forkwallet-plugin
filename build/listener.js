@@ -8,7 +8,7 @@
 //     }
 //   })
 console.log('WINDOW FOR LISTENER ======>', window);
-var port = chrome.runtime.connect();
+var port = chrome.runtime.connect({ name: 'transfer' });
 window.addEventListener('transfer', (event) => {
   console.log('transfer event happened in listener', event);
   port.postMessage({

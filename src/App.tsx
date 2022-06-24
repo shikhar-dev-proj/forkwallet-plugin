@@ -36,7 +36,12 @@ export const App = () => {
   console.log('password ... : ', password);
 
   return (
-    <Box textAlign="center" fontSize="xl" width={320} height={600}>
+    <Box 
+      background='linear-gradient(180deg, #0F1D4E 0%, #070F2C 100%)'
+      textAlign="center"
+      fontSize="xl"
+      width={320}
+      height={600}>
       <Grid height='100%' p={3}>
         {/* <HashRouter> */}
           {/* <Route 

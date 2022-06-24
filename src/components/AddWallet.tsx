@@ -1,25 +1,24 @@
-import { Button, Grid, Spacer, Text, VStack } from "@chakra-ui/react"
+import { Button, Divider, Grid, Image, Spacer, Text, VStack } from "@chakra-ui/react"
 import { useState } from "react"
-import { FaGalacticSenate } from "react-icons/fa"
-import { useDispatch } from "react-redux"
 import { useSetPassword } from "../hooks/usePassword"
 import { initWallet, useWallet } from "../hooks/useWallet"
 import { CreateWallet } from "./CreateWallet"
 import { CreateWalletSuccess } from "./CreateWalletSuccess"
 import { ImportWallet } from "./ImportWallet"
+import '@fontsource/inter';
 
 const AddWalletOptions = ({ setAddWalletOption }) => {
   return (
     <VStack spacing={10}>
       <Spacer />
-      <FaGalacticSenate size={100} />
+      <Image src="/LogoWithName.svg" height='8.75rem' width='5.375rem'  />
       <Grid gridGap={2}>
-        <Text fontSize="2xl" fontWeight="bold">ForkWallet</Text>
-        <Text fontSize="xl">Your Gateway to ForkWallet</Text>
+        <Text fontFamily='Inter' color='white' fontSize="xl">De-Fi wallet for earnings</Text>
       </Grid>
-      <Grid gridGap={5}>
-        <Button variant='solid' mt={20} onClick={() => {setAddWalletOption('create')}}>Create Wallet</Button>
-        <Button variant='outline' onClick={() => {setAddWalletOption('import')}}>Import with Seed Phrase</Button>
+      <Grid gridGap={5} width='90%'>
+        <Image mt={20} src='/divider.svg' />
+        <Button borderRadius='4px' colorScheme='primary' variant='solid' onClick={() => {setAddWalletOption('create')}}>Create Wallet</Button>
+        <Button borderRadius='4px' colorScheme='secondary' variant='solid' onClick={() => {setAddWalletOption('import')}}>Import with Seed Phrase</Button>
       </Grid>
     </VStack>
   )
