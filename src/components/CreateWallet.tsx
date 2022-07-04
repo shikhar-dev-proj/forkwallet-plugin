@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Checkbox, Container, Divider, Grid, HStack, Image, Input, List, ListIcon, ListItem, Spacer, Text, useClipboard, VStack } from "@chakra-ui/react";
+import { Badge, Box, Button, Checkbox, Container, Divider, Grid, Heading, HStack, Image, Input, List, ListIcon, ListItem, Spacer, Text, useClipboard, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { MdContentCopy, MdSettings } from "react-icons/md";
 import { generateMnemonic } from "../hooks/useWallet";
@@ -66,15 +66,18 @@ const CreateWalletSeedPhraseConfirm = ({mnemonic, setSeedWordsEnteredCorrectly})
 
   return (
     <VStack justifyContent='space-evenly'>
-      <Text fontSize="xs">Select to confirm seed phrase</Text>
+      <Heading as='h4' size='md' color='white'>
+        Have you saved it? 👀
+      </Heading>
+      <Text color='white' fontSize="xs">Verify that you have saved our seed phrase by clicking on the appropriate word.</Text>
       <Divider/>
       <HStack>
-        <Input value={inputOne} onChange={(e) => setInputOne(e.target.value)} isInvalid={inputOne !== seedPhraseWords[2]} size="xs" variant='filled' errorBorderColor='crimson' placeholder='3rd word' />
-        <Input value={inputTwo} onChange={(e) => setInputTwo(e.target.value)} isInvalid={inputTwo !== seedPhraseWords[11]} size="xs" variant='filled' errorBorderColor='crimson' placeholder='12th word' />
-        <Input value={inputThree} onChange={(e) => setInputThree(e.target.value)} isInvalid={inputThree !== seedPhraseWords[5]} size="xs" variant='filled' errorBorderColor='crimson' placeholder='6th word' />
+        <Input value={inputOne} onChange={(e) => setInputOne(e.target.value)} isInvalid={inputOne !== seedPhraseWords[2]} borderWidth='0.8px' borderStyle='solid' borderColor='rgba(126, 145, 212, 1)' fontWeight={600} variant='filled' color='white' _placeholder={{color: '#515A7D'}} background='rgba(255, 255, 255, 0.1)' size="xs" errorBorderColor='crimson' placeholder='3rd word' />
+        <Input value={inputTwo} onChange={(e) => setInputTwo(e.target.value)} isInvalid={inputTwo !== seedPhraseWords[11]} borderWidth='0.8px' borderStyle='solid' borderColor='rgba(126, 145, 212, 1)' fontWeight={600} variant='filled' color='white' _placeholder={{color: '#515A7D'}} background='rgba(255, 255, 255, 0.1)' size="xs" errorBorderColor='crimson' placeholder='12th word' />
+        <Input value={inputThree} onChange={(e) => setInputThree(e.target.value)} isInvalid={inputThree !== seedPhraseWords[5]} borderWidth='0.8px' borderStyle='solid' borderColor='rgba(126, 145, 212, 1)' fontWeight={600} variant='filled' color='white' _placeholder={{color: '#515A7D'}} background='rgba(255, 255, 255, 0.1)' size="xs" errorBorderColor='crimson' placeholder='6th word' />
       </HStack>
       <Container>
-        {mnemonic.split(' ').map(w => <Badge p={1} m={1} cursor='pointer' variant='outline' onClick={() => {handleInputChange(w)}}>{w}</Badge>)}
+        {mnemonic.split(' ').map(w => <Badge p={2} m={2} color='white' borderRadius='6.4px' backgroundColor='rgba(255, 255, 255, 0.1)' border='0.8px solid rgba(126, 145, 212, 1)' cursor='pointer' variant='filled' onClick={() => {handleInputChange(w)}}>{w}</Badge>)}
       </Container>
     </VStack>
   );

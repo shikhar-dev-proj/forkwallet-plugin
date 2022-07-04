@@ -31,10 +31,6 @@ export const App = () => {
   const [walletAvailable, setWalletAvailable] = useState(false);
   const backToMain = () => setWalletAvailable(true);
 
-  console.log('wallet ... : ', wallet);
-  console.log('hasWallet .... : ', hasWallet);
-  console.log('password ... : ', password);
-
   return (
     <Box 
       background='linear-gradient(180deg, #0F1D4E 0%, #070F2C 100%)'
@@ -50,7 +46,7 @@ export const App = () => {
           </Route> */}
         {/* </HashRouter> */}
         {/* <UnlockWallet/> */}
-        { !hasWallet ? 
+        { !hasWallet && !walletAvailable ? 
             <AddWallet back={backToMain}/>
             : hasWallet && !password ?
               <UnlockWallet></UnlockWallet> 
