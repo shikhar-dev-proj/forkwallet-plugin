@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Checkbox, Container, Divider, Grid, HStack, Image, Input, List, ListIcon, ListItem, Spacer, Text, VStack } from "@chakra-ui/react";
+import { Badge, Box, Button, Checkbox, Container, Divider, Grid, HStack, Image, Input, List, ListIcon, ListItem, Spacer, Text, useClipboard, VStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { MdContentCopy, MdSettings } from "react-icons/md";
 import { generateMnemonic } from "../hooks/useWallet";
@@ -6,12 +6,15 @@ import { CreateWalletSuccess } from "./CreateWalletSuccess";
 import { WalletCredentials } from "./WalletCredentials";
 import '@fontsource/inter';
 import { IoMdArrowBack } from "react-icons/io";
+import { FaClipboardCheck } from "react-icons/fa";
 
 
 const CreateWalletSeedPhrase = ({ mnemonic, setSeedPhraseCopied }) => {
 
+  const { hasCopied, onCopy } = useClipboard(mnemonic);
+
   return (
-    <VStack justifyContent='space-evenly'>
+    <VStack color='white' justifyContent='space-evenly'>
       <List spacing={3} textAlign='left' fontSize='0.8rem'>
         <ListItem>
           <ListIcon as={MdSettings} />
@@ -22,17 +25,14 @@ const CreateWalletSeedPhrase = ({ mnemonic, setSeedPhraseCopied }) => {
           Seed phrase is the only way to recover a wallet with lost private keys
         </ListItem>
       </List>
-      <Container maxW='2xl' bg='blue.600' centerContent>
-        <Box padding='4' bg='blue.400' color='black' maxW='md' fontSize='0.8rem'>
-          {mnemonic}
-        </Box>
+      <Container border='0.8px solid rgba(126, 145, 212, 1)' borderRadius='6.4px' p={5} maxW='2xl' bg='rgba(255, 255, 255, 0.1)' centerContent>
+        <Text fontFamily='Inter' fontWeight={500} fontSize='14px' lineHeight='24px' letterSpacing='0.02em' color='#FFFFFF'>{mnemonic}</Text>
       </Container>
-      <Button variant='solid' height={8} minW={8}>
-        <MdContentCopy/>
+      <Button onClick={()=> {onCopy()}} width='100%' color='white' leftIcon={hasCopied ? <FaClipboardCheck color="green"/> : <MdContentCopy/>} variant='solid' height={8} bg='rgba(255, 255, 255, 0.1)' borderWidth='0.8px' borderStyle='solid' borderColor='rgba(126, 145, 212, 1)'>
+        {hasCopied ? 'Copied' : 'Copy'}
       </Button>
-      <Divider />
-      <Checkbox fontSize='0.8rem' onChange={(e) => setSeedPhraseCopied(e.target.checked)}>
-        I’ve saved my seed phrase
+      <Checkbox size='sm' onChange={(e) => setSeedPhraseCopied(e.target.checked)}>
+        I understand that if I lose my recovery phrase, I’ll lose all of the crypto in my wallet.
       </Checkbox>
     </VStack>
   )
@@ -141,7 +141,7 @@ export const CreateWallet = ({ setAddWalletOption, createWallet }) => {
   }, [name, password, repeatPassword])
 
   return (
-    <Grid p={3} templateRows='5rem 1fr 9rem'>
+    <Grid p={3} templateRows='3rem 1fr 9rem'>
       <VStack spacing={1}>
         <Grid gridTemplateColumns='1rem 4rem 7rem 5rem'>
           <IoMdArrowBack size='md' color='white' onClick={() => setAddWalletOption('')}/>
