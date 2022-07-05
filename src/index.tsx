@@ -18,11 +18,11 @@ root.render(
     <ColorModeScript initialColorMode="light" />
     <ChakraProvider theme={theme}>
       {/* <Provider store={store}> */}
-      <RecoilRoot>
-        <BrowserRouter>
+      <BrowserRouter>
+        <RecoilRoot>
           <App />
-        </BrowserRouter>
-      </RecoilRoot>
+        </RecoilRoot>
+      </BrowserRouter>
       {/* </Provider> */}
     </ChakraProvider>
   </StrictMode>

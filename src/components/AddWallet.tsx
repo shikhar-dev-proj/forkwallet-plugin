@@ -6,6 +6,7 @@ import { CreateWallet } from "./CreateWallet"
 import { CreateWalletSuccess } from "./CreateWalletSuccess"
 import { ImportWallet } from "./ImportWallet"
 import '@fontsource/inter';
+import { useNavigate } from "react-router"
 
 const AddWalletOptions = ({ setAddWalletOption }) => {
   return (
@@ -24,12 +25,13 @@ const AddWalletOptions = ({ setAddWalletOption }) => {
   )
 }
 
-export const AddWallet = () => {
+export const AddWallet = ({ onCreation }) => {
 
   const [addWalletOption, setAddWalletOption] = useState('')
   // const dispatch = useDispatch()
   const { wallet } = useWallet();
   const setPassword = useSetPassword();
+  const navigate = useNavigate();
 
   console.log('Wallet Created State === > ', wallet);
 
@@ -37,6 +39,11 @@ export const AddWallet = () => {
     console.log('create wallet initiated with ... : ', name, password, mnemonic);
     initWallet({mnemonic, name, password});
     setPassword(password);
+  }
+
+  const onDone = () => {
+    navigate('/dashboard', {replace: true})
+    onCreation(true)
   }
 
   return (
@@ -47,7 +54,7 @@ export const AddWallet = () => {
           : addWalletOption === 'create' ?
             <CreateWallet setAddWalletOption={setAddWalletOption} createWallet={createWallet}/>
             : <ImportWallet setAddWalletOption={setAddWalletOption}/>
-        : <CreateWalletSuccess/>
+        : <CreateWalletSuccess onDone={onDone}/>
       }
     </>
   )

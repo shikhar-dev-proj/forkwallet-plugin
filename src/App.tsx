@@ -8,23 +8,28 @@ import { AddWallet } from "./components/AddWallet";
 import { TokenList } from "./components/TokenList";
 import { UnlockWallet } from './components/UnlockWallet';
 import { BrowserRouter, Route, useNavigate, Routes } from "react-router-dom";
+import { NoRouteFound } from "components/NoRouteFound";
 
 export const App = () => {
+
 
   useInitPasswordState();
   const password = usePassword();
   const { wallet, hasWallet } = useWallet();
   const navigate = useNavigate();
+  const [createdWallet, setCreatedWallet] = useState(false);
 
   useEffect(() => {
-    if (!hasWallet) {
-      navigate('/add');
+    if (!hasWallet && !createdWallet) {
+      navigate('/add', {replace: true});
     } else if (!password) {
-      navigate('/lock');
+      navigate('/lock', {replace: true});
+    } else if (hasWallet && !!wallet && !!password) {
+      navigate('/dashboard', {replace: true});
     } else {
-      navigate('/dashboard');
+      console.error('No route Defined')
     }
-  }, [])
+  }, [wallet, hasWallet, password, createdWallet])
 
   return (
       <Box 
@@ -34,11 +39,12 @@ export const App = () => {
         width={320}
         height={600}>
         <Grid height='100%' p={3}>
-            <Routes>
-              <Route path='lock' element={<UnlockWallet/>}/>
-              <Route path='add' element={<AddWallet />}/>
-              <Route path='dashboard' element={<TokenList/>} />
-            </Routes>
+          <Routes>
+            <Route path='lock' element={<UnlockWallet/>}/>
+            <Route path='add' element={<AddWallet onCreation={setCreatedWallet}/>}/>
+            <Route path='dashboard' element={<TokenList/>} />
+            <Route path='*' element={<NoRouteFound/>}></Route>
+          </Routes>
           {/* { !hasWallet && !walletAvailable ? 
               <AddWallet back={backToMain}/>
               : hasWallet && !password ?

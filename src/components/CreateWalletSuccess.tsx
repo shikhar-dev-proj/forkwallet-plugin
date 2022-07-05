@@ -1,11 +1,7 @@
 import { VStack, Button, Text, Heading, Image } from "@chakra-ui/react"
 import { GiGlassCelebration } from "react-icons/gi"
-import { useNavigate } from "react-router"
 
-export const CreateWalletSuccess = () => {
-
-  const navigate = useNavigate()
-  const done = () => navigate('/dashboard')
+export const CreateWalletSuccess = ({onDone}) => {
 
   return (
     <VStack justifyContent='space-evenly'>
@@ -17,7 +13,7 @@ export const CreateWalletSuccess = () => {
       <GiGlassCelebration size='xl' color="teal" />
       <Image mt={20} src='/divider.svg' />
       <Text fontSize='0.8rem' color='#586BAF' fontWeight={600}>✨ If you need to check your secret recovery phrase again, you can find it in Settings -&gt; Security.</Text>
-      <Button height={12} borderRadius='4px' colorScheme='primary' variant='solid' width='100%' onClick={()=>{done()}}>Done</Button>
+      <Button height={12} borderRadius='4px' colorScheme='primary' variant='solid' width='100%' onClick={()=>{onDone()}}>Done</Button>
     </VStack>
   )
 }
