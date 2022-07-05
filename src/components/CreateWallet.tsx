@@ -66,7 +66,7 @@ const CreateWalletSeedPhraseConfirm = ({mnemonic, setSeedWordsEnteredCorrectly})
 
   return (
     <VStack justifyContent='space-evenly'>
-      <Heading as='h4' size='md' color='white'>
+      <Heading as='h5' size='md' color='white' fontFamily='Inter' fontWeight={600} fontSize='1rem'>
         Have you saved it? 👀
       </Heading>
       <Text color='white' fontSize="xs">Verify that you have saved our seed phrase by clicking on the appropriate word.</Text>

@@ -24,7 +24,7 @@ const AddWalletOptions = ({ setAddWalletOption }) => {
   )
 }
 
-export const AddWallet = ({back}) => {
+export const AddWallet = () => {
 
   const [addWalletOption, setAddWalletOption] = useState('')
   // const dispatch = useDispatch()
@@ -47,7 +47,7 @@ export const AddWallet = ({back}) => {
           : addWalletOption === 'create' ?
             <CreateWallet setAddWalletOption={setAddWalletOption} createWallet={createWallet}/>
             : <ImportWallet setAddWalletOption={setAddWalletOption}/>
-        : <CreateWalletSuccess done={back}/>
+        : <CreateWalletSuccess/>
       }
     </>
   )

@@ -3,58 +3,51 @@ import {
 } from "@chakra-ui/react";
 import { useInitPasswordState, usePassword } from "hooks/usePassword";
 import { useWallet } from "hooks/useWallet";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddWallet } from "./components/AddWallet";
 import { TokenList } from "./components/TokenList";
 import { UnlockWallet } from './components/UnlockWallet';
-
-// export const RenderPageBasedOnState = () => {
-//   const walletState = useSelector((state: AppState) => state.wallet);
-//   // if (wallet.)
-// }
+import { BrowserRouter, Route, useNavigate, Routes } from "react-router-dom";
 
 export const App = () => {
 
-  // const dispatch = useDispatch();
-  // const web3Data = useSelector((state: AppState) => state.web3);
-  // window.web3 = web3Data;
-  // console.log(web3Data);
-  
-  // useEffect(() => {
-  //   dispatch(LoadWeb3());
-  // }, [dispatch]);
   useInitPasswordState();
-
   const password = usePassword();
   const { wallet, hasWallet } = useWallet();
+  const navigate = useNavigate();
 
-  const [walletAvailable, setWalletAvailable] = useState(false);
-  const backToMain = () => setWalletAvailable(true);
+  useEffect(() => {
+    if (!hasWallet) {
+      navigate('/add');
+    } else if (!password) {
+      navigate('/lock');
+    } else {
+      navigate('/dashboard');
+    }
+  }, [])
 
   return (
-    <Box 
-      background='linear-gradient(180deg, #0F1D4E 0%, #070F2C 100%)'
-      textAlign="center"
-      fontSize="xl"
-      width={320}
-      height={600}>
-      <Grid height='100%' p={3}>
-        {/* <HashRouter> */}
-          {/* <Route 
-            path="/"
-            component={RenderPageBasedOnState}>
-          </Route> */}
-        {/* </HashRouter> */}
-        {/* <UnlockWallet/> */}
-        { !hasWallet && !walletAvailable ? 
-            <AddWallet back={backToMain}/>
-            : hasWallet && !password ?
-              <UnlockWallet></UnlockWallet> 
-              : hasWallet && !!wallet && !!password ?
-                <TokenList/>
-                : null
-        }
-      </Grid>
-    </Box>
+      <Box 
+        background='linear-gradient(180deg, #0F1D4E 0%, #070F2C 100%)'
+        textAlign="center"
+        fontSize="xl"
+        width={320}
+        height={600}>
+        <Grid height='100%' p={3}>
+            <Routes>
+              <Route path='lock' element={<UnlockWallet/>}/>
+              <Route path='add' element={<AddWallet />}/>
+              <Route path='dashboard' element={<TokenList/>} />
+            </Routes>
+          {/* { !hasWallet && !walletAvailable ? 
+              <AddWallet back={backToMain}/>
+              : hasWallet && !password ?
+                <UnlockWallet></UnlockWallet> 
+                : hasWallet && !!wallet && !!password ?
+                  <TokenList/>
+                  : null
+          } */}
+        </Grid>
+      </Box>
   );
 }
