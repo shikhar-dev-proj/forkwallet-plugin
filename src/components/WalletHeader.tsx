@@ -12,7 +12,7 @@ export const WalletHeader = ({ walletName, walletAddress, lockWallet, onCopy, ha
           <Text fontSize='0.8rem' color='white' fontWeight={900}>{walletName}</Text>
           <Flex>
             <Text fontSize='0.75rem' mr='0.5rem' color='#7680A4'>{walletAddress}</Text>
-            {hasCopied ? <FaClipboardCheck color="green"/> : <FaRegCopy onClick={onCopy}/>}
+            {hasCopied ? <FaClipboardCheck color="green"/> : <FaRegCopy color="white" onClick={onCopy}/>}
           </Flex>
         </Grid>
         <IconButton aria-label='Lock' icon={<BsFillShieldLockFill />} onClick={lockWallet} />

@@ -104,9 +104,9 @@ export const TokenList = () => {
       <WalletHeader walletAddress={trimmedAddress} onCopy={onCopy} hasCopied={hasCopied} walletName={walletName} lockWallet={lockWallet} />
       <VStack m={2}>
         <Stat height='fit-content'>
-          <StatLabel>Account Balance</StatLabel>
-          <StatNumber>{balanceLoading ? <Spinner size='sm'/> : balance}</StatNumber>
-          <StatHelpText>ETH</StatHelpText>
+          <StatLabel color='white'>Account Balance</StatLabel>
+          <StatNumber color='white'>{balanceLoading ? <Spinner size='sm'/> : balance}</StatNumber>
+          <StatHelpText color='white'>ETH</StatHelpText>
         </Stat>
         <Button variant='solid' mt={20} onClick={onOpen}>Send</Button>
       </VStack>
