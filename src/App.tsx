@@ -4,11 +4,11 @@ import {
 import { useInitPasswordState, usePassword } from "hooks/usePassword";
 import { useWallet } from "hooks/useWallet";
 import { useEffect, useState } from "react";
-import { AddWallet } from "./components/AddWallet";
-import { TokenList } from "./components/TokenList";
-import { UnlockWallet } from './components/UnlockWallet';
+import { AddWallet } from "./pages/AddWallet";
+import { TokenList } from "./pages/TokenList";
+import { UnlockWallet } from './pages/UnlockWallet';
 import { BrowserRouter, Route, useNavigate, Routes } from "react-router-dom";
-import { NoRouteFound } from "components/NoRouteFound";
+import { NoRouteFound } from "pages/NoRouteFound";
 
 export const App = () => {
 

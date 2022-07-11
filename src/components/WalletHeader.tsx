@@ -2,8 +2,21 @@ import { Divider, Flex, Grid, IconButton, Image, Text } from "@chakra-ui/react";
 import { BsFillShieldLockFill } from "react-icons/bs";
 import { FaClipboardCheck, FaGalacticSenate, FaRegCopy } from "react-icons/fa";
 import { GiPadlock } from "react-icons/gi";
+import { IoMdGitNetwork } from "react-icons/io";
+import { HamburgerMenu, HamburgerMenuItem } from "reusables/HamburgerMenu";
 
 export const WalletHeader = ({ walletName, walletAddress, lockWallet, onCopy, hasCopied }) => {
+
+  const menuList = [{
+    icon: <BsFillShieldLockFill/>,
+    name: 'Lock Wallet',
+    onClick: lockWallet
+  }, {
+    icon: <IoMdGitNetwork/>,
+    name: 'Switch Chain',
+    onClick: () => {}
+  }]
+
   return (
     <Grid templateRows='4rem 1rem'>
       <Flex justifyContent='space-between' alignItems='center'>
@@ -15,7 +28,8 @@ export const WalletHeader = ({ walletName, walletAddress, lockWallet, onCopy, ha
             {hasCopied ? <FaClipboardCheck color="green"/> : <FaRegCopy color="white" onClick={onCopy}/>}
           </Flex>
         </Grid>
-        <IconButton aria-label='Lock' icon={<BsFillShieldLockFill />} onClick={lockWallet} />
+        {/* <IconButton aria-label='Lock' icon={<BsFillShieldLockFill />} onClick={lockWallet} /> */}
+        <HamburgerMenu menuList={menuList}/>
       </Flex>
       <Divider />
     </Grid>

@@ -15,7 +15,6 @@ const root = createRoot(document.getElementById("root"));
 
 root.render(
   <StrictMode>
-    <ColorModeScript initialColorMode="light" />
     <ChakraProvider theme={theme}>
       {/* <Provider store={store}> */}
       <BrowserRouter>
