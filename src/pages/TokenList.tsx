@@ -1,10 +1,12 @@
 import { Button, Grid, Heading, Input, InputGroup, InputRightAddon, Link, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, useClipboard, useDisclosure, useToast, VStack } from "@chakra-ui/react";
+import { supportedChains } from "const";
 import { useBalance } from "hooks/useBalance";
 import { useSetPassword } from "hooks/usePassword";
 import { useTransfer } from "hooks/useTransfer";
 import { useWallet } from "hooks/useWallet";
 import { useState } from "react";
 import { IoIosLink } from "react-icons/io";
+import { useRecoilState } from "recoil";
 import { FooterNav } from "../components/FooterNav";
 import { WalletHeader } from "../components/WalletHeader";
 
@@ -55,6 +57,8 @@ export const TokenList = () => {
   const setPassword = useSetPassword()
   const { balance, balanceLoading } = useBalance();
   const { isOpen, onOpen, onClose } = useDisclosure()
+  // const [ selectedChain, setSelectedChain ] = useState(supportedChains[0]);
+
   const wallet = walletState?.wallet?.wallet;
   const walletName = walletState?.wallet?.name;
   const walletAddress = wallet?.address;
@@ -101,7 +105,14 @@ export const TokenList = () => {
 
   return (
     <Grid templateRows='5rem 1fr 4rem'>
-      <WalletHeader walletAddress={trimmedAddress} onCopy={onCopy} hasCopied={hasCopied} walletName={walletName} lockWallet={lockWallet} />
+      <WalletHeader
+        walletAddress={trimmedAddress}
+        onCopy={onCopy}
+        hasCopied={hasCopied}
+        walletName={walletName}
+        // selectedChain={selectedChain}
+        // setSelectedChain={setSelectedChain}
+        lockWallet={lockWallet} />
       <VStack m={2}>
         <Stat height='fit-content'>
           <StatLabel color='white'>Account Balance</StatLabel>

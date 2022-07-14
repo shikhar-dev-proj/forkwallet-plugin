@@ -4,21 +4,13 @@ import { atom, useRecoilState } from "recoil";
 import { IChain } from "types/common";
 import { useWallet } from "./useWallet";
 
-const passwordState = atom<IChain | undefined>({
+const chainState = atom<IChain>({
   key: 'chain',
-  default: undefined,
+  default: supportedChains[0],
 });
 
 export function useChain() {
 
-  const [selectedChain, setSelectedChain] = useRecoilState(passwordState);
-  const { wallet } = useWallet();
-  
-  useEffect(() => {
-    if (!!wallet) {
-      if (!selectedChain) {
-        setSelectedChain(supportedChains[0])
-      }
-    }
-  }, [wallet]);
+  return useRecoilState(chainState);
+
 }

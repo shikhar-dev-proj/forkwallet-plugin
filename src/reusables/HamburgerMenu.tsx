@@ -1,7 +1,5 @@
-import { Menu, MenuButton, IconButton, MenuList, MenuItem } from "@chakra-ui/react"
-import { IconType } from "react-icons"
-import { BsFillShieldLockFill } from "react-icons/bs"
-import { IoMdGitNetwork, IoMdMenu } from "react-icons/io"
+import { IconButton, Menu, MenuButton, MenuItem, MenuList } from "@chakra-ui/react"
+import { IoMdMenu } from "react-icons/io"
 
 export type HamburgerMenuItem = {
   icon: React.ReactElement<any, string | React.JSXElementConstructor<any>>
@@ -11,21 +9,23 @@ export type HamburgerMenuItem = {
 
 export type HamburgerMenuProps = {
   menuList: HamburgerMenuItem[]
+  onClose?: () => void
 }
 
-export const HamburgerMenu = ({ menuList }: HamburgerMenuProps) => {
+export const HamburgerMenu = ({ menuList, onClose }: HamburgerMenuProps) => {
   return (
     <Menu>
       <MenuButton
         as={IconButton}
         aria-label='Options'
-        icon={<IoMdMenu />}
+        icon={<IoMdMenu color="white" />}
         variant='filled'
+        color='white'
         backgroundColor='rgb(37, 50, 106)'
       />
       <MenuList backgroundColor='rgb(37, 50, 106)'>
         {menuList.map(m => (
-          <MenuItem fontSize='1rem' icon={m.icon} onClick={m.onClick}>
+          <MenuItem fontSize='1rem' color='white' icon={m.icon} onClick={m.onClick} _hover={{ bg: 'primary.700' }} _focus={{ bg: 'primary.700' }}>
             {m.name}
           </MenuItem>
         ))}

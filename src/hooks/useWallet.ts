@@ -6,6 +6,7 @@ import * as bip39 from 'bip39';
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { usePassword } from './usePassword';
 import { supportedChains } from 'const';
+import { useChain } from './useChain';
 
 const WALLET_KEY = 'wallet'
 const MNEMONIC_KEY = 'mnemonic'
@@ -39,9 +40,18 @@ export type UseWalletReturnType = {
 export function useWallet(): UseWalletReturnType {
   const walletInState = useRecoilValue(walletState);
   const password = usePassword()
+  const [selectedChain, ] = useChain();
   const setWallet = useSetRecoilState(walletState)
 
   const [hasWallet, setHasWallet] = useState(false);
+
+  useEffect(() => {
+    if (walletInState) {
+      const infuraProvider = new ethers.providers.InfuraProvider(selectedChain.networkType, selectedChain.apikey)
+      setWallet({ ...walletInState, wallet: walletInState?.wallet.connect(infuraProvider)})
+    }
+  }, [selectedChain])
+
 
   useEffect(() => {
     if (walletInState) {
@@ -61,7 +71,8 @@ export function useWallet(): UseWalletReturnType {
             const walletStr = decrypt(encryptedWalletKey, password)
             console.log('decrypted wallet ... : ', JSON.parse(walletStr))
             const { name, index, key } = JSON.parse(walletStr)
-            const infuraProvider = new ethers.providers.InfuraProvider('goerli', supportedChains[1].apikey)
+            // const infuraProvider = new ethers.providers.InfuraProvider(selectedChain.networkType, selectedChain.apikey)
+            const infuraProvider = new ethers.providers.InfuraProvider('goerli', supportedChains[0].apikey)
             const etherWallet = (new ethers.Wallet(key)).connect(infuraProvider)
             console.log('decrypted wallet ... : ', name, index, key)
             const forkWallet = { name, index, wallet: etherWallet }
