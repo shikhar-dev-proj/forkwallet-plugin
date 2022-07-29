@@ -74,6 +74,8 @@ export const TokenList = () => {
   const transfer = useTransfer();
   const toast = useToast()
 
+  const [activeLink, setActiveLink] = useState('deposit')
+
 
   const initiateTransfer = async () => {
     setSendInProgress(true);
@@ -121,7 +123,7 @@ export const TokenList = () => {
         </Stat>
         <Button variant='solid' mt={20} onClick={onOpen}>Send</Button>
       </VStack>
-      <FooterNav />
+      <FooterNav activeLink={activeLink} setActiveLink={setActiveLink} />
       <SendModal 
         isOpen={isOpen}
         onClose={onClose}

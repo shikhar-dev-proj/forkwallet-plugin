@@ -25,3 +25,5 @@ export const supportedChains: IChain[] = [{
   networkType: 'rinkeby',
   apikey: '29b0a2e3567f4446bd0545f88818bdd7'
 }]
+
+export const etherScanAPIKey = 'PCWKX3U1CBUXTQN2SWDSIMDHKJTPK2FP69';
