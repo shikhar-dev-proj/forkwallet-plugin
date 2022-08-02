@@ -38,7 +38,7 @@ export const App = () => {
         fontSize="xl"
         width={320}
         height={600}>
-        <Grid height='100%' p={3}>
+        <Grid height='100%'>
           <Routes>
             <Route path='lock' element={<UnlockWallet/>}/>
             <Route path='add' element={<AddWallet onCreation={setCreatedWallet}/>}/>

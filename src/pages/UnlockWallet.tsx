@@ -21,7 +21,7 @@ export const UnlockWallet = () => {
     }
   }
   return (
-    <Box color='white'>
+    <Box p={3} color='white'>
       <Flex>
         <FaGalacticSenate size={50} />
         <Spacer />

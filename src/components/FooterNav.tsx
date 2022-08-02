@@ -6,9 +6,9 @@ import { FiActivity, FiCompass, FiSettings } from "react-icons/fi";
 
 export const FooterNav = ({ activeLink, setActiveLink }) => {
   return (
-    <VStack position='absolute' gap='0.5rem' left={0} right={0} bottom={0} height='4.8rem' background='#050B21'>
+    <VStack gap='0.5rem' height='4.8rem' background='#050B21'>
       <Image margin='unset !important' src='/divider.svg' />
-      <HStack justifyContent='space-around' width='100%' height='100%' alignItems='center'>
+      <HStack marginTop='unset !important' justifyContent='space-around' width='100%' height='100%' alignItems='center'>
         <VStack
           height='100%'
           justifyContent='flex-end'

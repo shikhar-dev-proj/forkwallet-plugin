@@ -10,7 +10,7 @@ import { useNavigate } from "react-router"
 
 const AddWalletOptions = ({ setAddWalletOption }) => {
   return (
-    <VStack spacing={10}>
+    <VStack spacing={10} p={3}>
       <Spacer />
       <Image src="/LogoWithName.svg" height='8.75rem' width='5.375rem'  />
       <Grid gridGap={2}>

@@ -46,7 +46,7 @@ export function useWallet(): UseWalletReturnType {
   const [hasWallet, setHasWallet] = useState(false);
 
   useEffect(() => {
-    if (walletInState) {
+    if (walletInState && selectedChain) {
       const infuraProvider = new ethers.providers.InfuraProvider(selectedChain.networkType, selectedChain.apikey)
       setWallet({ ...walletInState, wallet: walletInState?.wallet.connect(infuraProvider)})
     }

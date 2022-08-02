@@ -4,7 +4,7 @@ import { GiGlassCelebration } from "react-icons/gi"
 export const CreateWalletSuccess = ({onDone}) => {
 
   return (
-    <VStack justifyContent='space-evenly'>
+    <VStack p={3} justifyContent='space-evenly'>
       <Heading as='h5' size='md' color='white' fontFamily='Inter' fontWeight={600} fontSize='1rem'>
         Your wallet is ready! 🎉
       </Heading>

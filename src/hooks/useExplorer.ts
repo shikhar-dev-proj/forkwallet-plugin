@@ -5,7 +5,7 @@ import { atom, useRecoilValue, useSetRecoilState } from "recoil";
 import { useChain } from "./useChain";
 
 const explorer = atom<ethers.providers.EtherscanProvider | undefined>({
-  key: 'chain',
+  key: 'explorer',
   default: undefined,
 });
 

@@ -5,13 +5,21 @@ import { Transaction, TxType } from "types/common";
 import { useExplorer } from "./useExplorer";
 import { useWallet } from "./useWallet";
 
+export type TransactionState = {
+	loading: boolean
+	transactions: Transaction[]
+	error?: string
+}
 
-const transactions = atom<Transaction[]>({
+const transactions = atom<TransactionState>({
   key: 'transactions',
-	default: [],
+	default: {
+		loading: true,
+		transactions: []
+	},
 });
 
-export async function useTransactions(): Promise<Transaction[]> {
+export function useTransactions(): TransactionState {
 
 	const { wallet } = useWallet()
 	const explorer = useExplorer()
@@ -20,7 +28,9 @@ export async function useTransactions(): Promise<Transaction[]> {
 	const setTxListForWallet = async (address: string, startBlock: string, endBlock: string) => {
 		const history = await explorer?.getHistory(address, startBlock, endBlock)
 		if (!history) {
-			setTransactions([]);
+			setTransactions({ loading: false, transactions: [], error: 'Error in loading transactions'});
+		} else if (!history.length) {
+			setTransactions({ loading: false, transactions: [] });
 		} else {
 			const txList: Transaction[] = history?.map((t) => {
 				return {
@@ -34,7 +44,7 @@ export async function useTransactions(): Promise<Transaction[]> {
 					date: new Date(t.timestamp! * 1000)
 				};
 			});
-			setTransactions(txList);
+			setTransactions({ loading: false, transactions: txList });
 		}
 	}
 
